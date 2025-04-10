@@ -1,0 +1,23 @@
+[project]
+name = "small_size_league_promoter"
+version = "0.1.0"
+description = "small-size-league-promoter using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.108.0,<1.0.0"
+]
+
+[project.scripts]
+small_size_league_promoter = "small_size_league_promoter.main:run"
+run_crew = "small_size_league_promoter.main:run"
+train = "small_size_league_promoter.main:train"
+replay = "small_size_league_promoter.main:replay"
+test = "small_size_league_promoter.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
