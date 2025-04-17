@@ -10,10 +10,22 @@ app = FastAPI(
     title="RoboCup SSL Article Generator API",
     description="API for generating articles about RoboCup Small Size League using CrewAI",
     version="1.0.0",
+    docs_url="/"
 )
 
 class ArticleRequest(BaseModel):
-    """Request model for article generation."""
+    """Request model for article generation.
+    
+    Args:
+        topic: The topic of the article to generate.
+
+    Example of topics:
+        - Vision system and tracking
+        - Robot limitations
+        - Field specifications
+        - Referee system
+        - Tournament structure
+    """
     topic: str
 
 class ArticleResponse(BaseModel):
@@ -23,25 +35,7 @@ class ArticleResponse(BaseModel):
     success: bool
     message: str
 
-@app.get("/")
-async def root():
-    """Root endpoint with basic information."""
-    return {
-        "message": "RoboCup SSL Article Generator API is running",
-        "endpoints": {
-            "generate_article": "/generate-article",
-        },
-        "usage": "POST /generate-article with JSON body: {'topic': 'robot limitations', 'use_groq': true}",
-        "example_topics": [
-            "robot limitations",
-            "field specifications",
-            "vision system",
-            "referee system",
-            "tournament structure"
-        ]
-    }
-
-@app.post("/generate-article", response_model=ArticleResponse)
+@app.post("/generate-article", response_model=ArticleResponse, )
 async def generate_article(request: ArticleRequest):
     """Generate an article about the specified RoboCup SSL topic."""
     try:
@@ -56,16 +50,8 @@ async def generate_article(request: ArticleRequest):
         # Run the crew and get the result
         result = crew_instance.crew().kickoff(inputs=inputs)
         print(f"result: {type(result)} {result}\n")
-        article = Article(
-            topic=result.topic,
-            title=result.title,
-            summary=result.summary,
-            tldr=result.tldr,
-            sections=result.sections,
-            references=result.references
-        )
-
-        print(f"\n Article tldr: {article.tldr}")
+        article = result.pydantic
+        print(f"\n Article tldr: {type(article)} {article.tldr}")
 
 
         # Parse the markdown result into the Article model

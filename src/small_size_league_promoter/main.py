@@ -2,7 +2,6 @@
 import sys
 import warnings
 
-import uvicorn
 from dotenv import load_dotenv
 
 from small_size_league_promoter.crew import SmallSizeLeaguePromoter
@@ -25,9 +24,5 @@ def run():
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
-def run_api():
-    """Run the FastAPI server."""
-    uvicorn.run("small_size_league_promoter.main:app", host="0.0.0.0", port=8000, reload=True)
-
 if __name__ == "__main__":
-    run_api()
+    run()
