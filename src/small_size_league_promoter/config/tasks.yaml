@@ -1,17 +1,94 @@
-research_task:
+analyst_task:
   description: >
-    Conduct a thorough research about {topic}
-    Make sure you find any interesting and relevant information given
-    the current year is {current_year}.
+    Analyze the topic "{topic}" and structure the research approach.
   expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
-  agent: researcher
+    A structured outline of the research approach for the topic "{topic}".
+  agent: analyst
 
-reporting_task:
+research_task:
+    # 3. The website_content_repository will retrieve and synthesize information from the complete SSL digital ecosystem
   description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    Research the topic "{topic}" comprehensively as it relates to the RoboCup Small Size League (SSL).
+    
+    The research process should involve multiple specialized agents:
+    1. First, the analyst will break down the topic into key aspects and structure the research approach
+    2. The tdp_researcher will focus on gathering information from Team Description Papers and technical specifications
+    
+    The research should cover:
+    - Technical specifications and rules related to {topic} in RoboCup SSL
+    - Historical context and development
+    - Current implementations and best practices
+    - Challenges and limitations
+    - Future developments or changes
+    
+    Each agent should contribute their specialized knowledge and sources, ensuring comprehensive coverage.
+    Organize the findings into clear sections that can be used to create an informative article.
+    Make sure to gather enough information to produce an article with at least 300 words.
   expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
-    Formatted as markdown without '```'
-  agent: reporting_analyst
+    A structured outline with detailed research notes on {topic} in the context of RoboCup SSL,
+    organized by subtopic with sufficient detail to write an informative technical article.
+    The output should include contributions from all specialized agents, properly attributed and synthesized.
+  agent: tdp_researcher
+
+writing_task:
+  description: >
+    Using the research information provided by the specialized agents, write a comprehensive article about {topic} 
+    in the context of the RoboCup Small Size League (SSL).
+    
+    The article should:
+    - Have a clear, descriptive title that includes both the topic and RoboCup SSL
+    - Begin with a brief introduction explaining the topic's relevance to RoboCup SSL
+    - Include a concise summary/overview section
+    - Be organized into logical sections with descriptive headings
+    - Include technical details and specifications where relevant
+    - Explain any technical terms or concepts for readers new to RoboCup SSL
+    - Be at least 300 words in length
+    - Conclude with key takeaways or implications
+    
+    The writer should:
+    1. Create clear conceptual explanations of complex robotic systems
+    2. Develop progressive information structures from fundamentals to advanced concepts
+    3. Incorporate relevant diagrams, tables, and visual aids as appropriate
+    4. Use precise technical terminology while defining terms for newcomers
+    5. Highlight practical applications and real-world implications
+    6. Maintain reader engagement through narrative techniques and concrete examples
+    7. Adapt tone and depth based on target audience needs
+    
+    Format the article sections according to the Article and ArticleSection Pydantic models.
+    Each section should have a clear title and content.
+  expected_output: >
+    A well-structured, technically accurate article about {topic} in the context of 
+    RoboCup SSL, with properly formatted sections according to the Article model structure.
+  agent: writer
+
+editing_task:
+  description: >
+    Review and refine the article about {topic} in the context of RoboCup SSL. The editor should:
+    
+    1. Verify all technical specifications against official RoboCup SSL documentation
+    2. Check rule interpretations for accuracy and current applicability
+    3. Ensure proper progression of concepts for pedagogical effectiveness
+    4. Refine explanations of complex algorithms or systems for clarity
+    5. Validate that content addresses multiple knowledge levels appropriately
+    6. Confirm proper use of technical terminology and consistency
+    7. Improve organization for logical flow and easy reference
+    8. Guarantee the article Markdown structure correctness
+    9. Ensure adherence to SEO best practices for technical content
+    
+    The editor should check for:
+    - Technical accuracy of all information and specifications
+    - Completeness of coverage on the topic
+    - Clarity and accessibility for both technical and non-technical readers
+    - Proper structure and logical flow between sections
+    - Grammar, spelling, and punctuation
+    - Consistency in terminology and technical descriptions
+    - Total word count (ensure it's at least 300 words)
+    
+    Make any necessary edits to improve the quality and technical accuracy of the article
+    while preserving the original information and intent. Format the final output using
+    the Article model's format_markdown method.
+  expected_output: >
+    A polished, high-quality technical article about {topic} in the context of RoboCup SSL
+    that is accurate, well-structured, and accessible to readers with varying levels of
+    technical background, with at least 300 words, formatted according to the Article model.
+  agent: editor

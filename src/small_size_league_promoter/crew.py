@@ -1,61 +1,139 @@
+
 from crewai import Agent, Crew, Process, Task
+from crewai.knowledge.source.text_file_knowledge_source import TextFileKnowledgeSource
 from crewai.project import CrewBase, agent, crew, task
+from langchain_openai import ChatOpenAI
+
+from small_size_league_promoter.settings import settings
+
+from .tools import TDPSearchTool
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
+# Create a text file knowledge source
+text_source = TextFileKnowledgeSource(file_paths=["full_ssl_website.txt"])
+
+
 @CrewBase
-class SmallSizeLeaguePromoter():
-    """SmallSizeLeaguePromoter crew"""
+class SmallSizeLeaguePromoter:
+    """SmallSizeLeaguePromoter crew for RoboCup SSL article generation"""
 
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
     # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
-    agents_config = 'config/agents.yaml'
-    tasks_config = 'config/tasks.yaml'
+    agents_config = "config/agents.yaml"
+    tasks_config = "config/tasks.yaml"
 
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
-    @agent
-    def researcher(self) -> Agent:
-        return Agent(
-            config=self.agents_config['researcher'],
-            verbose=True
+
+    def __init__(self):
+        """Initialize with choice of LLM provider."""
+
+    def get_llm(self):
+        """Get the appropriate LLM based on the configuration."""
+        return ChatOpenAI(
+            model=settings.MODEL,
+            temperature=0.5,
+            openai_api_key=settings.OPENAI_API_KEY,
         )
 
     @agent
-    def reporting_analyst(self) -> Agent:
+    def analyst(self) -> Agent:
+        """Create the analyst agent."""
         return Agent(
-            config=self.agents_config['reporting_analyst'],
-            verbose=True
+            config=self.agents_config["analyst"],
+            llm=self.get_llm(),
+            verbose=True,
+            allow_delegation=True,            
+            knowledge_sources=[text_source],
+        )
+
+    @agent
+    def tdp_researcher(self) -> Agent:
+        """Create the TDP researcher agent."""
+        return Agent(
+            config=self.agents_config["tdp_researcher"],
+            agent_ops_agent_name="tdp_researcher",
+            verbose=True,
+            llm=self.get_llm(),
+            tools=[TDPSearchTool()],
+        )
+
+    # @agent
+    # def website_content_repository(self) -> Agent:
+    #     """Create the website content repository agent."""
+    #     return Agent(
+    #         config=self.agents_config["website_content_repository"],
+    #         verbose=True,
+    #         llm=self.get_llm(),
+    #         tools=[],
+    #         knowledge_sources=[text_source],
+    #     )
+
+    @agent
+    def writer(self) -> Agent:
+        """Create the writer agent."""
+        return Agent(
+            config=self.agents_config["writer"],
+            verbose=True,
+            llm=self.get_llm(),
+            knowledge_sources=[text_source],
+        )
+
+    @agent
+    def editor(self) -> Agent:
+        """Create the editor agent."""
+        return Agent(
+            config=self.agents_config["editor"],
+            verbose=True,
+            llm=self.get_llm(),
+            knowledge_sources=[text_source],
         )
 
     # To learn more about structured task outputs,
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def research_task(self) -> Task:
+    def analyst_task(self) -> Task:
+        """Create the analyst task."""
         return Task(
-            config=self.tasks_config['research_task'],
+            config=self.tasks_config["analyst_task"],            
         )
 
     @task
-    def reporting_task(self) -> Task:
+    def research_task(self) -> Task:
+        """Create the research task with multiple agents."""
         return Task(
-            config=self.tasks_config['reporting_task'],
-            output_file='report.md'
+            config=self.tasks_config["research_task"],            
+        )
+
+    @task
+    def writing_task(self) -> Task:
+        """Create the writing task."""
+        return Task(
+            config=self.tasks_config["writing_task"],
+
+        )
+
+    @task
+    def editing_task(self) -> Task:
+        """Create the editing task."""
+        return Task(
+            config=self.tasks_config["editing_task"],
         )
 
     @crew
     def crew(self) -> Crew:
-        """Creates the SmallSizeLeaguePromoter crew"""
+        """Creates the RoboCup SSL article generation crew."""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
         return Crew(
-            agents=self.agents, # Automatically created by the @agent decorator
-            tasks=self.tasks, # Automatically created by the @task decorator
+            agents=self.agents,  # Automatically created by the @agent decorator
+            tasks=self.tasks,  # Automatically created by the @task decorator
             process=Process.sequential,
             verbose=True,
             # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/

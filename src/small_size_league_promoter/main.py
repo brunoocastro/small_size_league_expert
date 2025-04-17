@@ -2,65 +2,101 @@
 import sys
 import warnings
 
-from datetime import datetime
+import uvicorn
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 
 from small_size_league_promoter.crew import SmallSizeLeaguePromoter
+from small_size_league_promoter.models import Article
+
+# Load environment variables
+load_dotenv()
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
-# This main file is intended to be a way for you to run your
-# crew locally, so refrain from adding unnecessary logic into this file.
-# Replace with inputs you want to test with, it will automatically
-# interpolate any tasks and agents information
+# FastAPI app definition
+app = FastAPI(
+    title="RoboCup SSL Article Generator API",
+    description="API for generating articles about RoboCup Small Size League using CrewAI",
+    version="1.0.0",
+)
+
+class ArticleRequest(BaseModel):
+    """Request model for article generation."""
+    topic: str
+    # use_groq: Optional[bool] = False
+
+class ArticleResponse(BaseModel):
+    """Response model for article generation."""
+    article: Article
+    markdown: str
+    success: bool
+    message: str
+
+@app.get("/")
+async def root():
+    """Root endpoint with basic information."""
+    return {
+        "message": "RoboCup SSL Article Generator API is running",
+        "endpoints": {
+            "generate_article": "/generate-article",
+        },
+        "usage": "POST /generate-article with JSON body: {'topic': 'robot limitations', 'use_groq': true}",
+        "example_topics": [
+            "robot limitations",
+            "field specifications",
+            "vision system",
+            "referee system",
+            "tournament structure"
+        ]
+    }
+
+@app.post("/generate-article", response_model=ArticleResponse)
+async def generate_article(request: ArticleRequest):
+    """Generate an article about the specified RoboCup SSL topic."""
+    try:
+        # Configure inputs for the crew
+        inputs = {
+            'topic': request.topic,
+        }
+        
+        # Initialize the crew with the specified LLM choice
+        crew_instance = SmallSizeLeaguePromoter()
+        
+        # Run the crew and get the result
+        result = crew_instance.crew().kickoff(inputs=inputs)
+        print(f"result: {result}")
+        # Parse the markdown result into the Article model
+        # For simplicity, we're returning the raw result and success info
+        return ArticleResponse(
+            article=result,  # Assuming the crew returns an Article instance
+            markdown=result.format_markdown(),
+            success=True,
+            message=f"Successfully generated article about {request.topic} in RoboCup SSL"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error generating article: {str(e)}"
+        )
 
 def run():
-    """
-    Run the crew.
-    """
+    """Run the crew using the command line."""
     inputs = {
-        'topic': 'AI LLMs',
-        'current_year': str(datetime.now().year)
+        'topic': sys.argv[1] if len(sys.argv) > 1 else 'robot limitations',
     }
     
     try:
-        SmallSizeLeaguePromoter().crew().kickoff(inputs=inputs)
+        result = SmallSizeLeaguePromoter().crew().kickoff(inputs=inputs)
+        print(f"RoboCup SSL article about '{inputs['topic']}' generated successfully. Output saved to 'article.md'")
+        print(result)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
+def run_api():
+    """Run the FastAPI server."""
+    uvicorn.run("small_size_league_promoter.main:app", host="0.0.0.0", port=8000, reload=True)
 
-def train():
-    """
-    Train the crew for a given number of iterations.
-    """
-    inputs = {
-        "topic": "AI LLMs"
-    }
-    try:
-        SmallSizeLeaguePromoter().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
-
-    except Exception as e:
-        raise Exception(f"An error occurred while training the crew: {e}")
-
-def replay():
-    """
-    Replay the crew execution from a specific task.
-    """
-    try:
-        SmallSizeLeaguePromoter().crew().replay(task_id=sys.argv[1])
-
-    except Exception as e:
-        raise Exception(f"An error occurred while replaying the crew: {e}")
-
-def test():
-    """
-    Test the crew execution and returns the results.
-    """
-    inputs = {
-        "topic": "AI LLMs",
-        "current_year": str(datetime.now().year)
-    }
-    try:
-        SmallSizeLeaguePromoter().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
-
-    except Exception as e:
-        raise Exception(f"An error occurred while testing the crew: {e}")
+if __name__ == "__main__":
+    run_api()
