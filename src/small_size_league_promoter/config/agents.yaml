@@ -1,6 +1,6 @@
 analyst:
   role: >
-    RoboCup Small Size League topic analyst:
+    RoboCup Small Size League topic analyst
   goal: >
     Systematically break down {topic} into key aspects and structured subtopics related to RoboCup Small Size League (SSL)
   backstory: >

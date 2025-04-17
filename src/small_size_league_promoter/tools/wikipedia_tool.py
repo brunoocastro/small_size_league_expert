@@ -24,13 +24,24 @@ class WikipediaSearchTool(BaseTool):
     )
     args_schema: Type[BaseModel] = WikipediaSearchInput
 
-    def _run(self, query: str, language: str = "pt") -> str:
+    def _run(self, query: str, language: str = "en") -> str:
         """
         Fetch content from Wikipedia API based on the search query.
+        Use mainly for getting general information about a topic.
+        Example: 
+            - "Artificial Intelligence"
+            - "RoboCup Small Size League"
+            - "Soccer"
+            - "RoboCup"
+            - "RoboCup Small Size League"
+            - "Computer Vision"
+            - "Machine Learning"
+            - "Deep Learning"
+            - "Robotics"
 
         Args:
             query: The search term to look up on Wikipedia.
-            language: The language code for Wikipedia (default: 'pt' for Portuguese).
+            language: The language code for Wikipedia (default: 'en' for English).
 
         Returns:
             String with the extracted content from Wikipedia.
@@ -68,6 +79,8 @@ class WikipediaSearchTool(BaseTool):
 
             # Get the extracted text
             extract = pages[page_id].get("extract", "")
+
+            print(f"\nWikipedia article for '{query}': {extract}\n")
 
             if not extract:
                 return f"The Wikipedia article for '{query}' exists but has no extractable content."

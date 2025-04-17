@@ -1,12 +1,12 @@
 
-from crewai import Agent, Crew, Process, Task
+from crewai import LLM, Agent, Crew, Process, Task
 from crewai.knowledge.source.text_file_knowledge_source import TextFileKnowledgeSource
 from crewai.project import CrewBase, agent, crew, task
-from langchain_openai import ChatOpenAI
 
+from small_size_league_promoter.models import Article
 from small_size_league_promoter.settings import settings
 
-from .tools import TDPSearchTool
+from .tools import TDPSearchTool, WikipediaSearchTool
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -34,10 +34,9 @@ class SmallSizeLeaguePromoter:
 
     def get_llm(self):
         """Get the appropriate LLM based on the configuration."""
-        return ChatOpenAI(
+        return LLM(
             model=settings.MODEL,
-            temperature=0.5,
-            openai_api_key=settings.OPENAI_API_KEY,
+            temperature=0.3 # Using this to not hallucinate inside the SSL content
         )
 
     @agent
@@ -46,8 +45,7 @@ class SmallSizeLeaguePromoter:
         return Agent(
             config=self.agents_config["analyst"],
             llm=self.get_llm(),
-            verbose=True,
-            allow_delegation=True,            
+            verbose=True,            
             knowledge_sources=[text_source],
         )
 
@@ -59,7 +57,7 @@ class SmallSizeLeaguePromoter:
             agent_ops_agent_name="tdp_researcher",
             verbose=True,
             llm=self.get_llm(),
-            tools=[TDPSearchTool()],
+            tools=[TDPSearchTool(), WikipediaSearchTool()],
         )
 
     # @agent
@@ -90,7 +88,6 @@ class SmallSizeLeaguePromoter:
             config=self.agents_config["editor"],
             verbose=True,
             llm=self.get_llm(),
-            knowledge_sources=[text_source],
         )
 
     # To learn more about structured task outputs,
@@ -123,6 +120,7 @@ class SmallSizeLeaguePromoter:
         """Create the editing task."""
         return Task(
             config=self.tasks_config["editing_task"],
+            output_pydantic=Article
         )
 
     @crew
@@ -134,7 +132,7 @@ class SmallSizeLeaguePromoter:
         return Crew(
             agents=self.agents,  # Automatically created by the @agent decorator
             tasks=self.tasks,  # Automatically created by the @task decorator
-            process=Process.sequential,
             verbose=True,
-            # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
+            process=Process.sequential, 
+            memory=True
         )

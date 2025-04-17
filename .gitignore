@@ -30,8 +30,6 @@ wheels/
 *.swp
 *.swo
 
-# Generated content
-article.md
 *.log
 
 # Virtualenv

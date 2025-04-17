@@ -48,12 +48,21 @@ uv pip install -e .
 pip install -e .
 ```
 
-3. Set up environment variables by creating a `.env` file:
+3. Set up environment variables by creating a `.env` file with:
+```
+MODEL=groq/llama3-8b-8192
+```
+
+You need to also add the API key for your LLM provider to the `.env` file. In this example, we're using Groq. So we need to add the following:
 ```
 GROQ_API_KEY=your_groq_api_key_here
-GOOGLE_API_KEY=your_google_api_key_here
-USE_GROQ=True  # Set to False to use Google Gemini instead
 ```
+
+> If you're using Gemini, you need to add the following:
+> ```
+> MODEL=google/gemini-1.5-flash
+> GOOGLE_API_KEY=your_google_api_key_here
+> ```
 
 ## Usage
 
@@ -62,7 +71,7 @@ USE_GROQ=True  # Set to False to use Google Gemini instead
 Run the FastAPI server with:
 
 ```bash
-run_api
+fastapi run api.py
 ```
 
 This starts the API server at http://localhost:8000
@@ -76,7 +85,6 @@ Example request:
 ```json
 {
   "topic": "robot limitations",
-  "use_groq": true
 }
 ```
 
@@ -85,10 +93,8 @@ Example request:
 Generate an article directly from the command line:
 
 ```bash
-run_crew "robot limitations"
+python main.py "robot limitations"
 ```
-
-The article will be saved to `article.md` in the current directory.
 
 ### Example Topics
 
