@@ -1,6 +1,10 @@
-# RoboCup SSL Article Generator
+# RoboCup Small Size League Promoter - AI Powered Article Generator
 
 This project implements a multi-agent system using CrewAI to automatically generate informative articles about the RoboCup Small Size League (SSL). The system leverages official RoboCup SSL documentation and Wikipedia to create comprehensive, technically accurate articles on various aspects of the competition.
+
+## Demo
+
+Public API available at: https://ssl.otone.tech/
 
 ## Features
 
