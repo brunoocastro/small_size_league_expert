@@ -2,31 +2,25 @@ analyst_task:
   description: >
     Analyze the topic "{topic}" and structure the research approach.
   expected_output: >
-    A structured outline of the research approach for the topic "{topic}".
+    A informative, concise and descriptive research brief about the topic "{topic}".
+    The research brief should be organized by subtopic with sufficient detail to write an informative technical article.
   agent: analyst
 
 research_task:
   description: >
     Research the topic "{topic}" comprehensively as it relates to the RoboCup Small Size League (SSL).
     
-    The research process should involve multiple specialized agents:
-    1. First, the analyst will break down the topic into key aspects and structure the research approach
-    2. The tdp_researcher will focus on gathering information from Team Description Papers and technical specifications
-    
     The research should cover:
-    - Technical specifications and rules related to {topic} in RoboCup SSL
     - Historical context and development
     - Current implementations and best practices
     - Challenges and limitations
     - Future developments or changes
     
-    Each agent should contribute their specialized knowledge and sources, ensuring comprehensive coverage.
     Organize the findings into clear sections that can be used to create an informative article.
-    Make sure to gather enough information to produce an article with at least 300 words.
   expected_output: >
-    A structured outline with detailed research notes on {topic} in the context of RoboCup SSL,
-    organized by subtopic with sufficient detail to write an informative technical article.
-    The output should include contributions from all specialized agents, properly attributed and synthesized.
+    A research about each topic mentioned in the research brief.
+    The research should be organized by subtopic with sufficient detail to write an informative technical article.
+    The output should be validated and reviewed mentioning the sources used.
   agent: tdp_researcher
 
 writing_task:
@@ -36,7 +30,6 @@ writing_task:
     
     The article should:
     - Have a clear, descriptive title that includes both the topic and RoboCup SSL
-    - Begin with a brief introduction explaining the topic's relevance to RoboCup SSL
     - Include a concise summary/overview section
     - Be organized into logical sections with descriptive headings
     - Include technical details and specifications where relevant
@@ -47,17 +40,16 @@ writing_task:
     The writer should:
     1. Create clear conceptual explanations of complex robotic systems
     2. Develop progressive information structures from fundamentals to advanced concepts
-    3. Incorporate relevant diagrams, tables, and visual aids as appropriate
     4. Use precise technical terminology while defining terms for newcomers
     5. Highlight practical applications and real-world implications
     6. Maintain reader engagement through narrative techniques and concrete examples
-    7. Adapt tone and depth based on target audience needs
     
     Format the article sections according to the Article and ArticleSection Pydantic models.
     Each section should have a clear title and content.
   expected_output: >
     A well-structured, technically accurate article about {topic} in the context of 
     RoboCup SSL, with properly formatted sections according to the Article model structure.
+    The article should be at least 300 words in length.
   agent: writer
 
 editing_task:
@@ -72,7 +64,6 @@ editing_task:
     6. Confirm proper use of technical terminology and consistency
     7. Improve organization for logical flow and easy reference
     8. Guarantee the article Markdown structure correctness
-    9. Ensure adherence to SEO best practices for technical content
     
     The editor should check for:
     - Technical accuracy of all information and specifications

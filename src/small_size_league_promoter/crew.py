@@ -12,7 +12,9 @@ from .tools import TDPSearchTool, WikipediaSearchTool
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 # Create a text file knowledge source
-text_source = TextFileKnowledgeSource(file_paths=["full_ssl_website.txt"])
+text_source = TextFileKnowledgeSource(
+    file_paths=["full_ssl_website.txt", "small_size_league_rules.txt"]
+)
 
 
 @CrewBase
