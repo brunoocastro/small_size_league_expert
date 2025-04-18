@@ -1,10 +1,9 @@
-
 from crewai import LLM, Agent, Crew, Process, Task
 from crewai.knowledge.source.text_file_knowledge_source import TextFileKnowledgeSource
 from crewai.project import CrewBase, agent, crew, task
 
 from small_size_league_promoter.models import Article
-from small_size_league_promoter.settings import settings
+from small_size_league_promoter.settings import Settings
 
 from .tools import TDPSearchTool, WikipediaSearchTool
 
@@ -31,12 +30,13 @@ class SmallSizeLeaguePromoter:
 
     def __init__(self):
         """Initialize with choice of LLM provider."""
+        self.settings = Settings()
 
     def get_llm(self):
         """Get the appropriate LLM based on the configuration."""
         return LLM(
-            model=settings.MODEL,
-            temperature=0.3 # Using this to not hallucinate inside the SSL content
+            model=self.settings.MODEL,
+            temperature=0.3,  # Using this to not hallucinate inside the SSL content
         )
 
     @agent
@@ -45,7 +45,7 @@ class SmallSizeLeaguePromoter:
         return Agent(
             config=self.agents_config["analyst"],
             llm=self.get_llm(),
-            verbose=True,            
+            verbose=True,
             knowledge_sources=[text_source],
         )
 
@@ -98,14 +98,14 @@ class SmallSizeLeaguePromoter:
     def analyst_task(self) -> Task:
         """Create the analyst task."""
         return Task(
-            config=self.tasks_config["analyst_task"],            
+            config=self.tasks_config["analyst_task"],
         )
 
     @task
     def research_task(self) -> Task:
         """Create the research task with multiple agents."""
         return Task(
-            config=self.tasks_config["research_task"],            
+            config=self.tasks_config["research_task"],
         )
 
     @task
@@ -113,16 +113,12 @@ class SmallSizeLeaguePromoter:
         """Create the writing task."""
         return Task(
             config=self.tasks_config["writing_task"],
-
         )
 
     @task
     def editing_task(self) -> Task:
         """Create the editing task."""
-        return Task(
-            config=self.tasks_config["editing_task"],
-            output_pydantic=Article
-        )
+        return Task(config=self.tasks_config["editing_task"], output_pydantic=Article)
 
     @crew
     def crew(self) -> Crew:
@@ -134,6 +130,6 @@ class SmallSizeLeaguePromoter:
             agents=self.agents,  # Automatically created by the @agent decorator
             tasks=self.tasks,  # Automatically created by the @task decorator
             verbose=True,
-            process=Process.sequential, 
-            memory=True
+            process=Process.sequential,
+            memory=True,
         )
