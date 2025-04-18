@@ -6,7 +6,6 @@ analyst_task:
   agent: analyst
 
 research_task:
-    # 3. The website_content_repository will retrieve and synthesize information from the complete SSL digital ecosystem
   description: >
     Research the topic "{topic}" comprehensively as it relates to the RoboCup Small Size League (SSL).
     

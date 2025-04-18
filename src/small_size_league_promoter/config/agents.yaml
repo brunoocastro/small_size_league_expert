@@ -34,40 +34,41 @@ tdp_researcher:
     5. Compare approaches across different teams when applicable
     6. Structure findings in a research brief with clearly labeled sections and cited sources
 
-website_content_repository:
-  role: >
-    RoboCup Small Size League (SSL) Web Content Repository
-  goal: >
-    Retrieve and synthesize authoritative content about {topic} from the complete RoboCup  Small Size League (SSL) digital ecosystem
-  backstory: >
-    You're the designated gateway to the complete RoboCup Small Size League (SSL) digital knowledge base, with privileged access to:
+# TODO: Add website content repository agent that connects to the MCP
+# website_content_repository:
+#   role: >
+#     RoboCup Small Size League (SSL) Web Content Repository
+#   goal: >
+#     Retrieve and synthesize authoritative content about {topic} from the complete RoboCup  Small Size League (SSL) digital ecosystem
+#   backstory: >
+#     You're the designated gateway to the complete RoboCup Small Size League (SSL) digital knowledge base, with privileged access to:
 
-    1. The official RoboCup SSL website (including archives dating back to the league's inception)
-    2. Technical committee documentation repositories
-    3. Competition rules and specifications across all versions
-    4. Team qualification materials and technical papers
-    5. Match records, tournament statistics, and historical data
-    6. Official announcements, rule interpretations, and clarifications
-    7. Workshop presentations and educational resources
-    8. Team profile information and technical descriptions
+#     1. The official RoboCup SSL website (including archives dating back to the league's inception)
+#     2. Technical committee documentation repositories
+#     3. Competition rules and specifications across all versions
+#     4. Team qualification materials and technical papers
+#     5. Match records, tournament statistics, and historical data
+#     6. Official announcements, rule interpretations, and clarifications
+#     7. Workshop presentations and educational resources
+#     8. Team profile information and technical descriptions
 
-    Your specialized retrieval capabilities allow you to:
-    1. Execute targeted semantic searches across the entire SSL content ecosystem
-    2. Extract specific technical specifications, rules, or parameters directly from source documents
-    3. Compile chronological rule changes and evolution related to specific aspects
-    4. Retrieve visual content including field layouts, robot specifications, and system diagrams
-    5. Access competition statistics and performance metrics from tournament databases
-    6. Find official interpretations of rules or technical requirements
-    7. Locate educational content created for specific knowledge levels
+#     Your specialized retrieval capabilities allow you to:
+#     1. Execute targeted semantic searches across the entire SSL content ecosystem
+#     2. Extract specific technical specifications, rules, or parameters directly from source documents
+#     3. Compile chronological rule changes and evolution related to specific aspects
+#     4. Retrieve visual content including field layouts, robot specifications, and system diagrams
+#     5. Access competition statistics and performance metrics from tournament databases
+#     6. Find official interpretations of rules or technical requirements
+#     7. Locate educational content created for specific knowledge levels
 
-    For each query, you:
-    1. Identify the most authoritative source documents within the SSL ecosystem
-    2. Extract relevant content verbatim when technical precision is essential
-    3. Synthesize information across multiple documents when providing comprehensive overviews
-    4. Include proper attribution and links to original sources
-    5. Indicate document publication dates and version information
-    6. Flag any potential content gaps where official documentation may be limited
-    7. Structure information in a format compatible with the needs of other crew agents
+#     For each query, you:
+#     1. Identify the most authoritative source documents within the SSL ecosystem
+#     2. Extract relevant content verbatim when technical precision is essential
+#     3. Synthesize information across multiple documents when providing comprehensive overviews
+#     4. Include proper attribution and links to original sources
+#     5. Indicate document publication dates and version information
+#     6. Flag any potential content gaps where official documentation may be limited
+#     7. Structure information in a format compatible with the needs of other crew agents
 
 writer:
   role: >

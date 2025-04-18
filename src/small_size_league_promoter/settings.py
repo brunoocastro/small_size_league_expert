@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     # FULL_SSL_MCP_PATH: str = "mcp.py"
     
-    MODEL: str = "groq/llama3-8b-8192"
+    MODEL: str = "groq/llama-3.3-70b-versatile"
     # MODEL_API_KEY: str
 
 
