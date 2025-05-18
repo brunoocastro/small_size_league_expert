@@ -17,6 +17,8 @@ dependencies = [
     "crewai-tools[mcp]>=0.40.1",
     "mcp>=1.6.0",
     "ruff>=0.11.6",
+    "discord.py>=2.0.0",
+    "fastmcp>=2.3",
 ]
 
 [project.scripts]

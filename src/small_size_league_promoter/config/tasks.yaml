@@ -1,84 +1,141 @@
-analyst_task:
-  description: >
-    Analyze the topic "{topic}" and structure the research approach.
-  expected_output: >
-    A informative, concise and descriptive research brief about the topic "{topic}".
-    The research brief should be organized by subtopic with sufficient detail to write an informative technical article.
-  agent: analyst
+# analyst_task:
+#   description: >
+#     Analyze the topic "{topic}" and structure the research approach.
+#   expected_output: >
+#     A informative, concise and descriptive research brief about the topic "{topic}".
+#     The research brief should be organized by subtopic with sufficient detail to write an informative technical article.
+#   agent: analyst
 
-research_task:
-  description: >
-    Research the topic "{topic}" comprehensively as it relates to the RoboCup Small Size League (SSL).
+# research_task:
+#   description: >
+#     Research the topic "{topic}" comprehensively as it relates to the RoboCup Small Size League (SSL).
     
-    The research should cover:
-    - Historical context and development
-    - Current implementations and best practices
-    - Challenges and limitations
-    - Future developments or changes
+#     The research should cover:
+#     - Historical context and development
+#     - Current implementations and best practices
+#     - Challenges and limitations
+#     - Future developments or changes
     
-    Organize the findings into clear sections that can be used to create an informative article.
-  expected_output: >
-    A research about each topic mentioned in the research brief.
-    The research should be organized by subtopic with sufficient detail to write an informative technical article.
-    The output should be validated and reviewed mentioning the sources used.
-  agent: tdp_researcher
+#     Organize the findings into clear sections that can be used to create an informative article.
+#   expected_output: >
+#     A research about each topic mentioned in the research brief.
+#     The research should be organized by subtopic with sufficient detail to write an informative technical article.
+#     The output should be validated and reviewed mentioning the sources used.
+#   agent: tdp_researcher
 
-writing_task:
-  description: >
-    Using the research information provided by the specialized agents, write a comprehensive article about {topic} 
-    in the context of the RoboCup Small Size League (SSL).
+# writing_task:
+#   description: >
+#     Using the research information provided by the specialized agents, write a comprehensive article about {topic} 
+#     in the context of the RoboCup Small Size League (SSL).
     
-    The article should:
-    - Have a clear, descriptive title that includes both the topic and RoboCup SSL
-    - Include a concise summary/overview section
-    - Be organized into logical sections with descriptive headings
-    - Include technical details and specifications where relevant
-    - Explain any technical terms or concepts for readers new to RoboCup SSL
-    - Be at least 300 words in length
-    - Conclude with key takeaways or implications
+#     The article should:
+#     - Have a clear, descriptive title that includes both the topic and RoboCup SSL
+#     - Include a concise summary/overview section
+#     - Be organized into logical sections with descriptive headings
+#     - Include technical details and specifications where relevant
+#     - Explain any technical terms or concepts for readers new to RoboCup SSL
+#     - Be at least 300 words in length
+#     - Conclude with key takeaways or implications
     
-    The writer should:
-    1. Create clear conceptual explanations of complex robotic systems
-    2. Develop progressive information structures from fundamentals to advanced concepts
-    4. Use precise technical terminology while defining terms for newcomers
-    5. Highlight practical applications and real-world implications
-    6. Maintain reader engagement through narrative techniques and concrete examples
+#     The writer should:
+#     1. Create clear conceptual explanations of complex robotic systems
+#     2. Develop progressive information structures from fundamentals to advanced concepts
+#     4. Use precise technical terminology while defining terms for newcomers
+#     5. Highlight practical applications and real-world implications
+#     6. Maintain reader engagement through narrative techniques and concrete examples
     
-    Format the article sections according to the Article and ArticleSection Pydantic models.
-    Each section should have a clear title and content.
-  expected_output: >
-    A well-structured, technically accurate article about {topic} in the context of 
-    RoboCup SSL, with properly formatted sections according to the Article model structure.
-    The article should be at least 300 words in length.
-  agent: writer
+#     Format the article sections according to the Article and ArticleSection Pydantic models.
+#     Each section should have a clear title and content.
+#   expected_output: >
+#     A well-structured, technically accurate article about {topic} in the context of 
+#     RoboCup SSL, with properly formatted sections according to the Article model structure.
+#     The article should be at least 300 words in length.
+#   agent: writer
 
-editing_task:
+# editing_task:
+#   description: >
+#     Review and refine the article about {topic} in the context of RoboCup SSL. The editor should:
+    
+#     1. Verify all technical specifications against official RoboCup SSL documentation
+#     2. Check rule interpretations for accuracy and current applicability
+#     3. Ensure proper progression of concepts for pedagogical effectiveness
+#     4. Refine explanations of complex algorithms or systems for clarity
+#     5. Validate that content addresses multiple knowledge levels appropriately
+#     6. Confirm proper use of technical terminology and consistency
+#     7. Improve organization for logical flow and easy reference
+#     8. Guarantee the article Markdown structure correctness
+    
+#     The editor should check for:
+#     - Technical accuracy of all information and specifications
+#     - Completeness of coverage on the topic
+#     - Clarity and accessibility for both technical and non-technical readers
+#     - Proper structure and logical flow between sections
+#     - Grammar, spelling, and punctuation
+#     - Consistency in terminology and technical descriptions
+#     - Total word count (ensure it's at least 300 words)
+    
+#     Make any necessary edits to improve the quality and technical accuracy of the article
+#     while preserving the original information and intent. Format the final output using
+#     the Article model's format_markdown method.
+#   expected_output: >
+#     A polished, high-quality technical article about {topic} in the context of RoboCup SSL
+#     that is accurate, well-structured, and accessible to readers with varying levels of
+#     technical background, with at least 300 words, formatted according to the Article model.
+#   agent: editor
+
+language_detection_decomposition_task:
   description: >
-    Review and refine the article about {topic} in the context of RoboCup SSL. The editor should:
-    
-    1. Verify all technical specifications against official RoboCup SSL documentation
-    2. Check rule interpretations for accuracy and current applicability
-    3. Ensure proper progression of concepts for pedagogical effectiveness
-    4. Refine explanations of complex algorithms or systems for clarity
-    5. Validate that content addresses multiple knowledge levels appropriately
-    6. Confirm proper use of technical terminology and consistency
-    7. Improve organization for logical flow and easy reference
-    8. Guarantee the article Markdown structure correctness
-    
-    The editor should check for:
-    - Technical accuracy of all information and specifications
-    - Completeness of coverage on the topic
-    - Clarity and accessibility for both technical and non-technical readers
-    - Proper structure and logical flow between sections
-    - Grammar, spelling, and punctuation
-    - Consistency in terminology and technical descriptions
-    - Total word count (ensure it's at least 300 words)
-    
-    Make any necessary edits to improve the quality and technical accuracy of the article
-    while preserving the original information and intent. Format the final output using
-    the Article model's format_markdown method.
+    Important step to decompose the question into sub-questions.
+    These will make it easier to retrieve the content related to the question "{question}" and then answer the question.
   expected_output: >
-    A polished, high-quality technical article about {topic} in the context of RoboCup SSL
-    that is accurate, well-structured, and accessible to readers with varying levels of
-    technical background, with at least 300 words, formatted according to the Article model.
-  agent: editor
+    1. The detected language code from the question.
+    2. A small list of detailed, SSL-related sub-questions.
+    
+    <INSTRUCTIONS>
+    - These sub-questions will be used to retrieve the content related to the question.
+    - These sub-questions must be strictly related to the question and must be in the English language.
+    - Provide a small list of sub-questions, only 3-5 is enough.
+    - You must deeply analyze the question to understand the main topic and then decompose it into sub-questions.
+    - These sub-questions can also help to enrich the context, bringing content related to the question.
+    - If the user refers to "category", "competition", "league" or things like that, you should always consider that is about the RoboCup Small Size League (SSL).
+  agent: language_decomposer
+
+retrieval_task:
+  description: >
+    Search all available tools and sources (Wikipedia, MCP, etc.) for content relevant to the sub-questions.
+    Should call each tool separately and return the results.
+  expected_output: >
+    A collection of relevant content snippets and their sources for each sub-question.
+
+    <INSTRUCTIONS>
+    - Wikipedia should be mainly used to enrich some concepts that cannot be correctly retrieved from the MCP tools (e.g. "What is High Frequency Communication?", "What is Protobuf ?")
+    - The MCP tools should be used to retrieve the most relevant content related to the question and sub-questions.
+    - You should call one tool per time, but you can call the same tool multiple times to retrieve more content.
+    - If none content is retrieved, you should return an empty list.
+
+  agent: retriever
+
+ranking_task:
+  description: >
+    Rank and filter the retrieved content for usefulness and accuracy based on the question {question}
+  expected_output: >
+    A ranked and filtered list of the most useful and accurate content snippets, with source links.
+  agent: ranker
+
+answer_generation_task:
+  description: >
+    Based on the ranked list of content, generate a concise, correct, and well-formatted Markdown answer for Discord.
+  expected_output: >
+    A Markdown-formatted answer suitable for Discord, concise and correct, and within Discord's message size limits.
+    
+    
+    <INSTRUCTIONS>
+    - The answer must be in the same language as the question {question}.
+    - If there are multiple statements in the answer, they should be separated by a new line.
+    - It's cool to add some emojis to the answer to make it more engaging.
+    - If none retrieved content is available, you should return a message saying that no content was found.
+    - All the statements in the phrases must refer to a retrieved knowledge and must provide the original source of the knowledge. The source should be a link to the original source and should be correctly formatted as "[statement](link)".
+    - All final answers must contain:
+      - The question (e.g: "Based on the question `{question}`, we have the following answer:") 
+      - The answer correctly formatted and carrying the functional links to original sources.
+  agent: answer_generator

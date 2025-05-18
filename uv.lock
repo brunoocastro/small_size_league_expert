@@ -519,7 +519,7 @@ wheels = [
 
 [[package]]
 name = "crewai"
-version = "0.114.0"
+version = "0.120.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "appdirs" },
@@ -546,9 +546,9 @@ dependencies = [
     { name = "tomli-w" },
     { name = "uv" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/66/23/1ae65357a94d788e1fa5a9140d1c5990e130f7bb60ea93e5bb9dbbc41c2c/crewai-0.114.0.tar.gz", hash = "sha256:b2f79693088088b3c1722abecc39a1535115f468d3ce1aa29dcf56cce3ff2968", size = 40529462 }
+sdist = { url = "https://files.pythonhosted.org/packages/e8/f7/c33a3e80e00e6916604bd52593d7acaf40b81cddcbff6c182b0d3cca9b1a/crewai-0.120.1.tar.gz", hash = "sha256:d2300da6b52a11923c7f6bd304e12c227840c2febc20d495b7c2f37efe48ea5a", size = 72377150 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/80/a9/18597cd8075124f1e903e5c6070c6397477d25e88f787014c712cd3e1c45/crewai-0.114.0-py3-none-any.whl", hash = "sha256:590cf6afe7d95ac1d482c4fa9033a29e0a9cb567daae4187f25c1cbb1c20af14", size = 285500 },
+    { url = "https://files.pythonhosted.org/packages/af/d3/f33b44b30fabfd284d555334aa952dff303f5b8be0831192a28584071899/crewai-0.120.1-py3-none-any.whl", hash = "sha256:cfb5af8d3633a223ae4ad785b9f22c796bba153d2d1efd96d50794e555d25839", size = 310031 },
 ]
 
 [package.optional-dependencies]
@@ -558,7 +558,7 @@ tools = [
 
 [[package]]
 name = "crewai-tools"
-version = "0.40.1"
+version = "0.45.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "chromadb" },
@@ -573,9 +573,15 @@ dependencies = [
     { name = "pytube" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/16/ff/0c16c9943ec1501b12fc72aca7815f191ffe94d5f1fe4e9c353ee8c4ad1d/crewai_tools-0.40.1.tar.gz", hash = "sha256:6af5040b2277df8fd592238a17bf584f95dcc9ef7766236534999c8a9e9d0b52", size = 744094 }
+sdist = { url = "https://files.pythonhosted.org/packages/e9/3a/7070dcacef56702c5d83ad1a87021b1666ff1850ff80b3aa7540892406e7/crewai_tools-0.45.0.tar.gz", hash = "sha256:1b2e4eff3f928ce5fac308d6e648719a0e4718a1228ae98980aa0d74fc16bfc7", size = 909723 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/35/05/619c00bae2dda038f0d218dd5197120c938e9c9ccef1b9e50cfb037486f6/crewai_tools-0.40.1-py3-none-any.whl", hash = "sha256:8f459f74dee64364bfdbc524c815c4afcfb9ed532b51e6b8b4f616398d46cf1e", size = 573286 },
+    { url = "https://files.pythonhosted.org/packages/6e/72/db45626973027c992df75cbc7ef391f18393d631be3bceb6388c1b9f01e1/crewai_tools-0.45.0-py3-none-any.whl", hash = "sha256:9dd34e4792c075ee7a72134aedaab268e78d0e350114fd7fe2426e691c5f52a3", size = 602659 },
+]
+
+[package.optional-dependencies]
+mcp = [
+    { name = "mcp" },
+    { name = "mcpadapt" },
 ]
 
 [[package]]
@@ -667,6 +673,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/5a/d3/8ae2869247df154b64c1884d7346d412fed0c49df84db635aab2d1c40e62/deprecation-2.1.0.tar.gz", hash = "sha256:72b3bde64e5d778694b0cf68178aed03d15e15477116add3fb773e581f9518ff", size = 173788 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/02/c3/253a89ee03fc9b9682f1541728eb66db7db22148cd94f89ab22528cd1e1b/deprecation-2.1.0-py2.py3-none-any.whl", hash = "sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a", size = 11178 },
+]
+
+[[package]]
+name = "discord-py"
+version = "2.5.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aiohttp" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7f/dd/5817c7af5e614e45cdf38cbf6c3f4597590c442822a648121a34dee7fa0f/discord_py-2.5.2.tar.gz", hash = "sha256:01cd362023bfea1a4a1d43f5280b5ef00cad2c7eba80098909f98bf28e578524", size = 1054879 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/57/a8/dc908a0fe4cd7e3950c9fa6906f7bf2e5d92d36b432f84897185e1b77138/discord_py-2.5.2-py3-none-any.whl", hash = "sha256:81f23a17c50509ffebe0668441cb80c139e74da5115305f70e27ce821361295a", size = 1155105 },
 ]
 
 [[package]]
@@ -855,6 +873,25 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/2e/40/26e56696b9696ab4fbba25a96b8037ca3f9fd8a8cc55b4b36400ef023e49/fastavro-1.10.0-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:6575be7f2b5f94023b5a4e766b0251924945ad55e9a96672dc523656d17fe251", size = 3258045 },
     { url = "https://files.pythonhosted.org/packages/4e/bc/2f6c92c06c5363372abe828bccdd95762f2c1983b261509f94189c38c8a1/fastavro-1.10.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:fe471deb675ed2f01ee2aac958fbf8ebb13ea00fa4ce7f87e57710a0bc592208", size = 3418001 },
     { url = "https://files.pythonhosted.org/packages/0c/ce/cfd16546c04ebbca1be80873b533c788cec76f7bfac231bfac6786047572/fastavro-1.10.0-cp312-cp312-win_amd64.whl", hash = "sha256:567ff515f2a5d26d9674b31c95477f3e6022ec206124c62169bc2ffaf0889089", size = 487855 },
+]
+
+[[package]]
+name = "fastmcp"
+version = "2.3.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "exceptiongroup" },
+    { name = "httpx" },
+    { name = "mcp" },
+    { name = "openapi-pydantic" },
+    { name = "python-dotenv" },
+    { name = "rich" },
+    { name = "typer" },
+    { name = "websockets" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/75/d9/cc3eb61c59fec834a9492ea21df134381b4be76c35faa18cd2b0249278b8/fastmcp-2.3.4.tar.gz", hash = "sha256:f3fe004b8735b365a65ec2547eeb47db8352d5613697254854bc7c9c3c360eea", size = 998315 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a0/e6/310d1fe6708b7338e1f48915a13d8bf00fd0599acdc7bf98da4fd20fcb66/fastmcp-2.3.4-py3-none-any.whl", hash = "sha256:12a45f72dd95aeaa1a6a56281fff96ca46929def3ccd9f9eb125cb97b722fbab", size = 96393 },
 ]
 
 [[package]]
@@ -1246,18 +1283,17 @@ wheels = [
 
 [[package]]
 name = "httpx"
-version = "0.27.2"
+version = "0.28.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
     { name = "certifi" },
     { name = "httpcore" },
     { name = "idna" },
-    { name = "sniffio" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/78/82/08f8c936781f67d9e6b9eeb8a0c8b4e406136ea4c3d1f89a5db71d42e0e6/httpx-0.27.2.tar.gz", hash = "sha256:f7c2be1d2f3c3c3160d441802406b206c2b76f5947b11115e6df10c6c65e66c2", size = 144189 }
+sdist = { url = "https://files.pythonhosted.org/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956/httpx-0.28.1.tar.gz", hash = "sha256:75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc", size = 141406 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/95/9377bcb415797e44274b51d46e3249eba641711cf3348050f76ee7b15ffc/httpx-0.27.2-py3-none-any.whl", hash = "sha256:7bb2708e112d8fdd7829cd4243970f0c223274051cb35ee80c03301ee29a3df0", size = 76395 },
+    { url = "https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl", hash = "sha256:d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad", size = 73517 },
 ]
 
 [package.optional-dependencies]
@@ -1789,7 +1825,7 @@ wheels = [
 
 [[package]]
 name = "litellm"
-version = "1.60.2"
+version = "1.68.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -1804,9 +1840,9 @@ dependencies = [
     { name = "tiktoken" },
     { name = "tokenizers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/94/8f/704cdb0fdbdd49dc5062a39ae5f1a8f308ae0ffd746df6e0137fc1776b8a/litellm-1.60.2.tar.gz", hash = "sha256:a8170584fcfd6f5175201d869e61ccd8a40ffe3264fc5e53c5b805ddf8a6e05a", size = 6447447 }
+sdist = { url = "https://files.pythonhosted.org/packages/ba/22/138545b646303ca3f4841b69613c697b9d696322a1386083bb70bcbba60b/litellm-1.68.0.tar.gz", hash = "sha256:9fb24643db84dfda339b64bafca505a2eef857477afbc6e98fb56512c24dbbfa", size = 7314051 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8a/ba/0eaec9aee9f99fdf46ef1c0bddcfe7f5720b182f84f6ed27f13145d5ded2/litellm-1.60.2-py3-none-any.whl", hash = "sha256:1cb08cda04bf8c5ef3e690171a779979e4b16a5e3a24cd8dc1f198e7f198d5c4", size = 6746809 },
+    { url = "https://files.pythonhosted.org/packages/10/af/1e344bc8aee41445272e677d802b774b1f8b34bdc3bb5697ba30f0fb5d52/litellm-1.68.0-py3-none-any.whl", hash = "sha256:3bca38848b1a5236b11aa6b70afa4393b60880198c939e582273f51a542d4759", size = 7684460 },
 ]
 
 [[package]]
@@ -1897,7 +1933,7 @@ wheels = [
 
 [[package]]
 name = "mcp"
-version = "1.6.0"
+version = "1.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -1905,13 +1941,29 @@ dependencies = [
     { name = "httpx-sse" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "python-multipart" },
     { name = "sse-starlette" },
     { name = "starlette" },
-    { name = "uvicorn" },
+    { name = "uvicorn", marker = "sys_platform != 'emscripten'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/95/d2/f587cb965a56e992634bebc8611c5b579af912b74e04eb9164bd49527d21/mcp-1.6.0.tar.gz", hash = "sha256:d9324876de2c5637369f43161cd71eebfd803df5a95e46225cab8d280e366723", size = 200031 }
+sdist = { url = "https://files.pythonhosted.org/packages/bc/8d/0f4468582e9e97b0a24604b585c651dfd2144300ecffd1c06a680f5c8861/mcp-1.9.0.tar.gz", hash = "sha256:905d8d208baf7e3e71d70c82803b89112e321581bcd2530f9de0fe4103d28749", size = 281432 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/10/30/20a7f33b0b884a9d14dd3aa94ff1ac9da1479fe2ad66dd9e2736075d2506/mcp-1.6.0-py3-none-any.whl", hash = "sha256:7bd24c6ea042dbec44c754f100984d186620d8b841ec30f1b19eda9b93a634d0", size = 76077 },
+    { url = "https://files.pythonhosted.org/packages/a5/d5/22e36c95c83c80eb47c83f231095419cf57cf5cca5416f1c960032074c78/mcp-1.9.0-py3-none-any.whl", hash = "sha256:9dfb89c8c56f742da10a5910a1f64b0d2ac2c3ed2bd572ddb1cfab7f35957178", size = 125082 },
+]
+
+[[package]]
+name = "mcpadapt"
+version = "0.1.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jsonref" },
+    { name = "mcp" },
+    { name = "pydantic" },
+    { name = "python-dotenv" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fc/15/0e6b412dc81e30577adde9f69c0c075d9f0a47a735cdd20cfec33875279e/mcpadapt-0.1.7.tar.gz", hash = "sha256:450a1e1e681088aef6129351d6666c9ecf71e5dc49a3ce46c44230111f987697", size = 3537144 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b2/9a/d68d0f0235fda5c7b4aac141519f02f5af62f642374b51cbf5a3e5b7d4bf/mcpadapt-0.1.7-py3-none-any.whl", hash = "sha256:8fd686d36ca06464ec76b651d46e5c13c212e2c88c33b08d30b8f953e8421705", size = 17039 },
 ]
 
 [[package]]
@@ -2200,6 +2252,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/41/56/41de36c0e9f787c406211552ecf2ca4fba3db900207c5c158c4dc67263fc/openai-1.72.0.tar.gz", hash = "sha256:f51de971448905cc90ed5175a5b19e92fd94e31f68cde4025762f9f5257150db", size = 426061 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/03/1c/a0870f31bd71244c8c3a82e171677d9a148a8ea1cb157308cb9e06a41a37/openai-1.72.0-py3-none-any.whl", hash = "sha256:34f5496ba5c8cb06c592831d69e847e2d164526a2fb92afdc3b5cf2891c328c3", size = 643863 },
+]
+
+[[package]]
+name = "openapi-pydantic"
+version = "0.5.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/02/2e/58d83848dd1a79cb92ed8e63f6ba901ca282c5f09d04af9423ec26c56fd7/openapi_pydantic-0.5.1.tar.gz", hash = "sha256:ff6835af6bde7a459fb93eb93bb92b8749b754fc6e51b2f1590a19dc3005ee0d", size = 60892 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/12/cf/03675d8bd8ecbf4445504d8071adab19f5f993676795708e36402ab38263/openapi_pydantic-0.5.1-py3-none-any.whl", hash = "sha256:a3a09ef4586f5bd760a8df7f43028b60cafb6d9f61de2acba9574766255ab146", size = 96381 },
 ]
 
 [[package]]
@@ -3422,8 +3486,10 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "crewai", extra = ["tools"] },
-    { name = "crewai-tools" },
+    { name = "crewai-tools", extra = ["mcp"] },
+    { name = "discord-py" },
     { name = "fastapi", extra = ["standard"] },
+    { name = "fastmcp" },
     { name = "langchain-google-genai" },
     { name = "langchain-groq" },
     { name = "langchain-openai" },
@@ -3439,7 +3505,9 @@ dependencies = [
 requires-dist = [
     { name = "crewai", extras = ["tools"], specifier = ">=0.108.0,<1.0.0" },
     { name = "crewai-tools", extras = ["mcp"], specifier = ">=0.40.1" },
+    { name = "discord-py", specifier = ">=2.0.0" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.109.0" },
+    { name = "fastmcp", specifier = ">=2.3" },
     { name = "langchain-google-genai", specifier = ">=0.1.0" },
     { name = "langchain-groq", specifier = ">=0.1.0" },
     { name = "langchain-openai", specifier = ">=0.2.14" },
