@@ -8,7 +8,7 @@ class DiscordSettings(BaseSettings):
     )
 
     DISCORD_BOT_TOKEN: str
-    DISCORD_GUILD_ID: str | None = None
+    DISCORD_GUILD_ID: int | None = None
 
 
 discord_settings = DiscordSettings()
