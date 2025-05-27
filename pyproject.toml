@@ -2,10 +2,10 @@
 name = "small_size_league_promoter"
 version = "0.1.0"
 description = "RoboCup SSL article generation system using CrewAI"
-authors = [{ name = "Your Name", email = "you@example.com" }]
+authors = [{ name = "Bruno Castro", email = "bruno.c0310@gmail.com" }]
 requires-python = ">=3.10,<3.13"
 dependencies = [
-    "crewai[tools]>=0.108.0,<1.0.0",
+    "crewai[tools]==0.121.0",
     "langchain-groq>=0.1.0",
     "langchain-google-genai>=0.1.0",
     "fastapi[standard]>=0.109.0",

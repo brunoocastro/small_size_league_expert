@@ -3,8 +3,13 @@ from crewai.knowledge.source.text_file_knowledge_source import TextFileKnowledge
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import MCPServerAdapter
 
-from small_size_league_promoter.models import QuestionAnswer
-from small_size_league_promoter.settings import Settings
+from small_size_league_expert.models import (
+    DiscordAnswer,
+    Question,
+    RankResult,
+    RetrieverResult,
+)
+from small_size_league_expert.settings import Settings
 
 from .tools import WikipediaSearchTool
 
@@ -17,8 +22,8 @@ text_source = TextFileKnowledgeSource(file_paths=["content_description.txt"])
 
 
 @CrewBase
-class SmallSizeLeaguePromoter:
-    """SmallSizeLeaguePromoter crew for RoboCup SSL article generation"""
+class SmallSizeLeagueExpert:
+    """SmallSizeLeagueExpert crew for RoboCup SSL article generation"""
 
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
@@ -37,68 +42,7 @@ class SmallSizeLeaguePromoter:
         """Get the appropriate LLM based on the configuration."""
         return LLM(
             model=self.settings.MODEL,
-            temperature=0.1,  # Using this to not hallucinate inside the SSL content
-        )
-
-    # @agent
-    # def analyst(self) -> Agent:
-    #     """Create the analyst agent."""
-    #     return Agent(
-    #         config=self.agents_config["analyst"],
-    #         llm=self.get_llm(),
-    #         verbose=True,
-    #         knowledge_sources=[text_source],
-    #     )
-
-    # @agent
-    # def tdp_researcher(self) -> Agent:
-    #     """Create the TDP researcher agent."""
-    #     return Agent(
-    #         config=self.agents_config["tdp_researcher"],
-    #         agent_ops_agent_name="tdp_researcher",
-    #         verbose=True,
-    #         llm=self.get_llm(),
-    #         tools=[TDPSearchTool(), WikipediaSearchTool()],
-    #     )
-
-    # TODO: Add website content repository agent that connects to the MCP
-    # @agent
-    # def website_content_repository(self) -> Agent:
-    #     """Create the website content repository agent."""
-    #     return Agent(
-    #         config=self.agents_config["website_content_repository"],
-    #         verbose=True,
-    #         llm=self.get_llm(),
-    #         tools=[],
-    #         knowledge_sources=[text_source],
-    #     )
-
-    # @agent
-    # def writer(self) -> Agent:
-    #     """Create the writer agent."""
-    #     return Agent(
-    #         config=self.agents_config["writer"],
-    #         verbose=True,
-    #         llm=self.get_llm(),
-    #         knowledge_sources=[text_source],
-    #     )
-
-    # @agent
-    # def editor(self) -> Agent:
-    #     """Create the editor agent."""
-    #     return Agent(
-    #         config=self.agents_config["editor"],
-    #         verbose=True,
-    #         llm=self.get_llm(),
-    #     )
-
-    @agent
-    def classifier(self) -> Agent:
-        """Create the classifier agent."""
-        return Agent(
-            config=self.agents_config["classifier"],
-            llm=self.get_llm(),
-            verbose=True,
+            temperature=0,  # Using this to not hallucinate inside the SSL content
         )
 
     @agent
@@ -148,6 +92,7 @@ class SmallSizeLeaguePromoter:
         """Detect language and decompose the question."""
         return Task(
             config=self.tasks_config["language_detection_decomposition_task"],
+            output_pydantic=Question,
         )
 
     @task
@@ -155,6 +100,7 @@ class SmallSizeLeaguePromoter:
         """Retrieve relevant content."""
         return Task(
             config=self.tasks_config["retrieval_task"],
+            expected_output=RetrieverResult,
         )
 
     @task
@@ -162,6 +108,7 @@ class SmallSizeLeaguePromoter:
         """Rank and filter the content."""
         return Task(
             config=self.tasks_config["ranking_task"],
+            output_pydantic=RankResult,
         )
 
     @task
@@ -169,7 +116,7 @@ class SmallSizeLeaguePromoter:
         """Generate the final answer in Markdown for Discord."""
         return Task(
             config=self.tasks_config["answer_generation_task"],
-            output_pydantic=QuestionAnswer,
+            output_pydantic=DiscordAnswer,
         )
 
     @crew
@@ -177,14 +124,12 @@ class SmallSizeLeaguePromoter:
         """Creates the SSL Q&A crew for Discord."""
         return Crew(
             agents=[
-                self.classifier(),
                 self.language_decomposer(),
                 self.retriever(),
                 self.ranker(),
                 self.answer_generator(),
             ],
             tasks=[
-                # self.classification_task(),
                 self.language_detection_decomposition_task(),
                 self.retrieval_task(),
                 self.ranking_task(),
@@ -192,5 +137,4 @@ class SmallSizeLeaguePromoter:
             ],
             verbose=True,
             process=Process.sequential,
-            # memory=True,
         )

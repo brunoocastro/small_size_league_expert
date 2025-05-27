@@ -2,7 +2,7 @@ from discord import Intents, Interaction, Object, app_commands
 from discord.ext import commands
 
 from discord_settings import DiscordSettings
-from src.small_size_league_promoter.crew import SmallSizeLeaguePromoter
+from src.small_size_league_expert.crew import SmallSizeLeagueExpert
 
 settings = DiscordSettings()
 
@@ -24,7 +24,7 @@ class Ask(commands.Cog):
 
         inputs = {"question": question}
 
-        crew_instance = SmallSizeLeaguePromoter()
+        crew_instance = SmallSizeLeagueExpert()
 
         print("Kicking off SSL promoter crew...")
         # Ensure your crew is configured to handle potential blocking IO asynchronously
@@ -32,11 +32,19 @@ class Ask(commands.Cog):
         result = await crew_instance.crew().kickoff_async(inputs=inputs)
         print(f"Crew execution finished. Result type: {type(result.pydantic)}")
 
-        answer = result.pydantic.answer
+        final_answer = (
+            f'{interaction.user.mention}: "{question}"\n\n{result.pydantic.answer}'
+        )
 
-        final_answer = f"{answer}"
+        cropped_message = "... (truncated per Discord message size limit)"
+        message_size_limit = 2000 - len(cropped_message)
 
-        await interaction.followup.send(final_answer)
+        cropped_answer = final_answer[:message_size_limit]
+
+        if len(final_answer) > message_size_limit:
+            cropped_answer = cropped_answer + cropped_message
+
+        await interaction.followup.send(cropped_answer)
 
 
 # Introduce bot - Some commands to explain what the bot is for
