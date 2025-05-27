@@ -32,6 +32,8 @@ class SmallSizeLeaguePromoter:
     def __init__(self):
         """Initialize with choice of LLM provider."""
         self.settings = Settings()
+        self._mcp_tools = None
+        self._mcp_adapter = None
 
     def get_llm(self):
         """Get the appropriate LLM based on the configuration."""
@@ -39,6 +41,40 @@ class SmallSizeLeaguePromoter:
             model=self.settings.MODEL,
             temperature=0.1,  # Using this to not hallucinate inside the SSL content
         )
+
+    def _initialize_mcp_tools(self):
+        """Initialize MCP tools with proper error handling."""
+        if self._mcp_tools is not None:
+            return self._mcp_tools
+
+        try:
+            server_params = {
+                "url": "http://localhost:8000/sse",
+            }
+
+            # Create a persistent MCP adapter
+            self._mcp_adapter = MCPServerAdapter(server_params)
+            self._mcp_tools = self._mcp_adapter.__enter__()
+            print(
+                f"✅ Loaded {len(self._mcp_tools)} MCP Tools from {server_params['url']}"
+            )
+            return self._mcp_tools
+
+        except Exception as e:
+            print(f"⚠️ Failed to initialize MCP tools: {e}")
+            print("🔄 Continuing with Wikipedia-only tools...")
+            return []
+
+    def cleanup_mcp_tools(self):
+        """Cleanup MCP tools properly."""
+        if self._mcp_adapter:
+            try:
+                self._mcp_adapter.__exit__(None, None, None)
+            except Exception as e:
+                print(f"Warning: Error cleaning up MCP adapter: {e}")
+            finally:
+                self._mcp_adapter = None
+                self._mcp_tools = None
 
     # @agent
     # def analyst(self) -> Agent:
@@ -112,18 +148,15 @@ class SmallSizeLeaguePromoter:
 
     @agent
     def retriever(self) -> Agent:
-        """Create the retriever agent."""
-        server_params = {
-            "url": "http://localhost:8000/sse",
-        }
-        with MCPServerAdapter(server_params) as MCPTools:
-            print(f" Loaded {len(MCPTools)} MCP Tools from {server_params['url']}")
-            return Agent(
-                config=self.agents_config["retriever"],
-                llm=self.get_llm(),
-                verbose=True,
-                tools=MCPTools + [WikipediaSearchTool()],
-            )
+        """Create the retriever agent with robust MCP tool handling."""
+        mcp_tools = self._initialize_mcp_tools()
+
+        return Agent(
+            config=self.agents_config["retriever"],
+            llm=self.get_llm(),
+            verbose=True,
+            tools=mcp_tools + [WikipediaSearchTool()],
+        )
 
     @agent
     def ranker(self) -> Agent:
@@ -194,3 +227,7 @@ class SmallSizeLeaguePromoter:
             process=Process.sequential,
             # memory=True,
         )
+
+    def __del__(self):
+        """Cleanup when the instance is destroyed."""
+        self.cleanup_mcp_tools()
