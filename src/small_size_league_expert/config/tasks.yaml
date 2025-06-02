@@ -1,55 +1,84 @@
 language_detection_decomposition_task:
   description: >
     Systematically analyze the input question to detect language and decompose into strategic sub-questions that maximize retrieval effectiveness.
-    
-    CHAIN OF THOUGHT PROCESS:
+
+    # CHAIN OF THOUGHT PROCESS:
     Step 1: Language Detection Analysis
     - Identify primary language using linguistic markers
     - Note any mixed-language elements or technical terms
     - Assign ISO language code with confidence level
-    
+    - Write the exact same question in English for consistency
+
     Step 2: Question Semantic Analysis
     - Extract core technical concepts
     - Identify question type (what/how/why/when/where)
     - Determine complexity level and target audience
-    
-    Step 3: Sub-Question Generation Strategy
+
+    Step 3: Field of Knowledge Identification
+    - Classify question into SSL-specific domains (technical/rules/strategy)
+    - Classify question into general technical domains (algorithms/hardware/software)
+    - Identify any cross-domain relationships (e.g., hardware affecting strategy)
+
+    Step 4: Sub-Question Generation Strategy
     - Generate focused sub-questions covering different knowledge domains
     - Ensure each sub-question targets specific retrievable information
     - Validate sub-questions align with available knowledge sources
-    
-    FEW-SHOT EXAMPLES:
-    
-    Example 1:
+
+    # EXAMPLES:
+
+    ## Example 1:
     Input: "¿Cuáles son las dimensiones oficiales del campo de fútbol robot?"
-    Language: es (Spanish)
-    Sub-questions:
-    1. "What are the official SSL field dimensions in meters?"
-    2. "What are the goal area specifications in SSL?"
-    3. "What are the penalty area measurements in SSL?"
-    
-    Example 2:
+    Output: {
+      "question": "What are the official robot soccer field dimensions?",
+      "language_code": "es_ES",
+      "sub_questions": [
+        "What are the official SSL field dimensions in meters?",
+        "What are the goal area specifications in SSL?",
+        "What are the penalty area measurements in SSL?"
+      ],
+      "keywords": ["dimensions", "field"],
+      "technical_domains": ["rules", "technical specifications"],
+    }
+
+
+    ## Example 2:
     Input: "How does the vision system track multiple robots simultaneously?"
-    Language: en (English)
-    Sub-questions:
-    1. "What computer vision algorithms are used in SSL global vision?"
-    2. "How does SSL vision system handle robot identification and tracking?"
-    3. "What are the technical specifications of SSL vision hardware?"
-    
-    Example 3:
+    Output: {
+      "question": "How does the vision system track multiple robots simultaneously?",
+      "language_code": "en_US",
+      "sub_questions": [
+        "What computer vision algorithms are used in SSL global vision?",
+        "How does SSL vision system handle robot identification and tracking?",
+        "What are the technical specifications of SSL vision hardware?"
+      ],
+      "keywords": ["vision system", "tracking", "robots"],
+      "technical_domains": ["computer vision", "hardware specifications"],
+    }
+
+    ## Example 3:
     Input: "Wie funktioniert die Kommunikation zwischen Robotern im Spiel?"
-    Language: de (German)
-    Sub-questions:
-    1. "What communication protocols are allowed in SSL robot teams?"
-    2. "How do SSL robots coordinate during gameplay?"
-    3. "What are the communication frequency limitations in SSL?"
+    Output: {
+      "question": "How does communication between robots work in the game?",
+      "language_code": "de_DE",
+      "sub_questions": [
+        "What communication protocols are allowed in SSL robot teams?",
+        "How do SSL robots coordinate during gameplay?",
+        "What are the communication frequency limitations in SSL?"
+      ],
+      "keywords": ["communication", "robots", "gameplay"],
+      "technical_domains": ["communication protocols", "radio communication"],
+    }
+
+    ## Question
+    Input: {original_question}
+    Output:
   expected_output: >
     A structured analysis containing:
     1. Detected language code (ISO format)
-    2. Confidence level for language detection (1-10)
+    2. Translated question in English
     3. Core technical concepts identified
-    4. Question complexity assessment (beginner/intermediate/advanced)
-    5. Exactly 3-4 focused sub-questions in English that:
+    4. Keywords extracted from the question
+    5. Exactly 3 focused sub-questions in English that:
        - Cover different knowledge domains (technical/rules/strategy)
        - Are directly answerable using available sources
        - Maintain semantic coherence with original question
@@ -59,42 +88,42 @@ language_detection_decomposition_task:
 retrieval_task:
   description: >
     Execute strategic content retrieval using systematic search methodology to gather comprehensive, authoritative information for each sub-question.
-    
+
     CHAIN OF THOUGHT PROCESS:
     Step 1: Source Prioritization Strategy
     - Analyze each sub-question to determine optimal source types
     - Prioritize MCP SSL-specific sources for domain knowledge
     - Identify Wikipedia needs for general technical concepts
     - Plan search query optimization for maximum relevance
-    
+
     Step 2: MCP Source Exploitation
     - Execute targeted searches using SSL-specific terminology
     - Retrieve official documentation, rules, and specifications
     - Gather team descriptions and technical papers
     - Extract competition guidelines and historical data
-    
+
     Step 3: Wikipedia Supplementation
     - Search for general technical concepts not in SSL sources
     - Retrieve foundational knowledge (algorithms, protocols, hardware)
     - Gather context for technical terms and methodologies
     - Supplement with academic and industry standards
-    
+
     Step 4: Content Quality Assessment
     - Validate source authority and recency
     - Ensure content directly addresses sub-questions
     - Check for completeness and technical accuracy
     - Document source metadata for ranking phase
-    
+
     SEARCH STRATEGY EXAMPLES:
-    
+
     Technical Sub-question: "What computer vision algorithms are used in SSL global vision?"
     - MCP Search: "SSL vision system algorithms camera calibration object detection"
     - Wikipedia Search: "computer vision object tracking algorithms stereo vision"
-    
+
     Rules Sub-question: "What are the official SSL field dimensions?"
     - MCP Search: "SSL field specifications dimensions official rules"
     - Wikipedia Search: "Not needed - domain-specific information"
-    
+
     Strategy Sub-question: "How do teams coordinate robot formations?"
     - MCP Search: "SSL team coordination formation strategy tactical planning"
     - Wikipedia Search: "multi-agent coordination distributed systems"
@@ -107,58 +136,60 @@ retrieval_task:
     5. Technical depth level (basic/intermediate/advanced)
     6. Coverage completeness assessment for each sub-question
     7. Identified knowledge gaps where no suitable content was found
-    
+
     Format: Structured list with clear source attribution and metadata for optimal ranking phase input.
   agent: retriever
 
 ranking_task:
   description: >
     Apply systematic evaluation criteria using chain-of-thought analysis to rank and filter retrieved content for maximum educational value and accuracy.
-    
+
+    The question is: "{original_question}"
+
     CHAIN OF THOUGHT RANKING PROCESS:
-    
+
     Step 1: Relevance Assessment Matrix
     For each content snippet, evaluate:
     - Direct answer potential (Does it directly address the sub-question?)
     - Conceptual alignment (How well does it match the original question intent?)
     - Technical depth appropriateness (Matches user's apparent knowledge level?)
     - Scope coverage (How much of the sub-question does it answer?)
-    
+
     Step 2: Authority and Reliability Scoring
     - Source credibility: Official SSL > Academic > Team Documentation > Community
     - Content freshness: Recent official updates > Historical documentation
     - Technical accuracy indicators: References, citations, technical detail level
     - Community validation: Known reliable sources vs unverified content
-    
+
     Step 3: Educational Value Analysis
     - Pedagogical progression: Builds understanding systematically
     - Practical applicability: Actionable information vs theoretical only
     - Completeness: Provides sufficient detail for understanding
     - Clarity: Technical accuracy without unnecessary complexity
-    
+
     Step 4: Synthesis Optimization
     - Complementary content identification: Pieces that work well together
     - Redundancy elimination: Remove duplicate information
     - Gap identification: Missing critical information areas
     - Answer architecture: How pieces combine for comprehensive response
-    
+
     RANKING CRITERIA EXAMPLES:
-    
+
     High Priority (Score 9-10):
     - Official SSL rules document excerpt answering field dimensions
     - Recent technical committee clarification on specific rule interpretation
     - Peer-reviewed algorithm description with SSL implementation details
-    
+
     Medium Priority (Score 6-8):
     - Team description paper explaining successful strategy implementation
     - Academic paper with relevant algorithmic approach
     - Community-validated technical explanation with practical examples
-    
+
     Low Priority (Score 3-5):
     - General Wikipedia article requiring significant context
     - Outdated documentation with superseded information
     - Incomplete explanations requiring substantial supplementation
-    
+
     Exclude (Score 1-2):
     - Content unrelated to SSL or sub-questions
     - Contradictory information without authoritative resolution
@@ -172,82 +203,105 @@ ranking_task:
     5. Identified content gaps requiring synthesis or acknowledgment
     6. Recommended answer structure using ranked content
     7. Quality assurance notes for answer generation phase
-    
+
     Format: Structured ranking with clear rationale enabling optimal answer synthesis.
   agent: ranker
 
 answer_generation_task:
   description: >
     Synthesize ranked content into an engaging, pedagogically optimized Discord response that educates while maintaining technical accuracy and platform constraints.
-    
+
     CHAIN OF THOUGHT ANSWER CONSTRUCTION:
-    
+
     Step 1: Content Synthesis Strategy
     - Analyze ranked content for logical flow and narrative structure
     - Identify key concepts requiring definition or context
     - Plan information hierarchy from fundamental to advanced
     - Determine optimal balance between comprehensiveness and conciseness
-    
+
     Step 2: Language and Formatting Adaptation
     - Detect target language from original question analysis
     - Plan technical term translation strategy maintaining accuracy
     - Design Discord formatting for maximum readability
     - Optimize emoji placement for engagement without compromising professionalism
-    
+
     Step 3: Source Integration Architecture
     - Plan inline citation strategy for each factual claim
     - Ensure every technical statement has authoritative backing
     - Design reference format for translated content marking
     - Validate all links are functional and accessible
-    
+
     Step 4: Educational Value Optimization
     - Structure content for progressive understanding
     - Include practical implications where relevant
     - Anticipate follow-up questions and address preemptively
     - Balance technical depth with accessibility
-    
-    RESPONSE STRUCTURE TEMPLATE:
-    
-    ```
-    **🤖 Based on your question: "{original_question}"**
-    
-    ## 🔍 [Main Concept Title]
-    
-    [Core explanation with inline citations]
-    
-    ### 📋 Key Technical Details:
-    • [Specific fact with [source](link)]
-    • [Another fact with [source](link)]
-    • [Additional detail with [source](link)]
-    
-    ### ⚙️ Practical Implications:
-    [How this applies in real SSL contexts]
-    
-    ---
-    *⚠️ This answer is AI-generated from SSL knowledge sources. Verify critical information with official SSL documentation.*
-    ```
-    
+
+    <INSTRUCTIONS>
+      CHARACTER LIMIT MANAGEMENT:
+      - Target 1800 characters maximum (200 character buffer)
+      - Prioritize most critical information first
+      - Use bullet points for efficient information density
+      - Implement graceful truncation with continuation indicators
+
+      RESPONSE STRUCTURE TEMPLATE:
+
+      ```markdown
+      **🤖 Based on your question: "{original_question}"**\n\n
+      ## 🔍 [Main Concept Title]\n
+      [Core explanation with inline citations]\n
+      ### 📋 Key Technical Details:\n
+      - Specific fact with [source](link)\n
+      - Another fact with [source](link)\n
+      - Additional detail where the source will be mentioned after\n
+      - A comment that is referred to the above fact. [Source](link)\n
+      ### ⚙️ Practical Implications:\n
+      [How this applies in real SSL contexts]\n
+      ---\n
+      *⚠️ This answer is AI-generated from SSL knowledge sources. Verify critical information with official SSL documentation.*
+      ```
+
     FORMATTING EXAMPLES:
-    
-    English Response:
-    "🤖 **Based on your question: "How does SSL vision work?"**
-    
-    ## 🔍 SSL Global Vision System
-    
-    The [SSL vision system uses multiple overhead cameras](https://ssl.robocup.org/vision) to track all robots and the ball simultaneously..."
-    
-    Spanish Response:
-    "🤖 **Basado en tu pregunta: "¿Cómo funciona la visión SSL?"**
-    
-    ## 🔍 Sistema de Visión Global SSL
-    
-    El [sistema de visión SSL utiliza múltiples cámaras aéreas](https://ssl.robocup.org/vision) para rastrear todos los robots y la pelota simultáneamente..."
-    
-    CHARACTER LIMIT MANAGEMENT:
-    - Target 1800 characters maximum (200 character buffer)
-    - Prioritize most critical information first
-    - Use bullet points for efficient information density
-    - Implement graceful truncation with continuation indicators
+
+    Question: "How does SSL vision work?"
+    Answer:
+    ```markdown
+    **🤖 Based on your question: "How does SSL vision work?"**\n\n
+    # 🤖 SSL Global Vision System\n
+    The [SSL vision system uses multiple overhead cameras](https://ssl.robocup.org/vision) to track all robots and the ball simultaneously...\n
+    *⚠️ This answer is AI-generated from SSL knowledge sources. Verify critical information with official SSL documentation.*\n
+    ```
+
+    Question: "¿Cómo funciona la visión SSL?"
+    Answer:
+    ```markdown
+    "🤖 **Basado en tu pregunta: "¿Cómo funciona la visión SSL?"**\n\n
+    # 🔍 Sistema de Visión Global SSL\n
+    El [sistema de visión SSL utiliza múltiples cámaras aéreas](https://ssl.robocup.org/vision) para rastrear todos los robots y la pelota simultáneamente...\n
+    *⚠️ Esta respuesta es generada por IA a partir de fuentes de conocimiento SSL. Verifica la información crítica con la documentación oficial de SSL.*\n
+    ```
+
+    Question: "Qual o tamanho do campo ?"
+    Answer:
+    ```markdown
+    "🤖 **Baseado na sua pergunta: "Qual o tamanho do campo?"**\n\n
+    # 🔍 Dimensões do Campo SSL\n
+    O campo de jogo deve ser retangular e ter as seguintes dimensões:\n
+    - Divisão A: 13,4 metros x 10,4 metros, com uma área de jogo de 12 metros x 9 metros.\n
+    - Divisão B: 10,4 metros x 7,4 metros, com uma área de jogo de 9 metros x 6 metros.\n
+    As dimensões exatas do campo e as marcações podem variar em até ±10% em cada dimensão linear. [Fonte](https://robocup-ssl.github.io/ssl-rules/sslrules.html)\n\n
+    ### 📋 Detalhes Técnicos:\n
+    - Área de defesa: retângulo tocando as linhas de gol centralmente em frente a ambos os gols.\n
+    - Tamanho da área de defesa: 3,6 metros x 1,8 metros para a Divisão A e 2 metros x 1 metro para a Divisão B. [Fonte](https://robocup-ssl.github.io/ssl-rules/sslrules.html)\n\n
+    ### ⚙️ Implicações Práticas:\n
+    Compreender as dimensões do campo é crucial para o planejamento de estratégias de jogo e posicionamento dos robôs. Isso pode afetar diretamente a eficácia das jogadas e a dinâmica da partida.
+    Busque o tamanho correto para a categoria do seu time.\n\n
+    ---\n
+    *⚠️ Esta resposta é gerada por IA a partir de fontes de conhecimento SSL. Verifica a informação crítica com a documentação oficial de SSL.*\n
+    ```
+
+    Question: {original_question}
+
   expected_output: >
     A Discord-optimized response containing:
     1. Question acknowledgment in original language
@@ -259,6 +313,7 @@ answer_generation_task:
     7. Proper translation markers for non-English content
     8. Professional disclaimer and verification reminder
     9. Engaging format encouraging further learning
-    
-    Format: Discord Markdown with functional links, proper formatting, and educational structure optimized for SSL community engagement.
+    10. Line breaks and bullet points for clarity
+
+    Format: Discord Markdown with functional links, proper formatting, line breaking, and educational structure optimized for SSL community engagement.
   agent: answer_generator

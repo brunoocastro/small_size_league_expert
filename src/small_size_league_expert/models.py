@@ -8,9 +8,34 @@ class Question(BaseModel):
 
     question: str = Field(..., description="The question")
     language_code: str = Field(..., description="The language code of the question")
-    keywords: List[str] = Field(..., description="The keywords related to the question")
+    keywords: List[str] = Field(
+        ...,
+        description="The keywords related to the question",
+        examples=[
+            "robot",
+            "field",
+            "dimensions",
+            "goal",
+            "penalty",
+            "area",
+            "measurements",
+        ],
+    )
+    technical_domains: List[str] = Field(
+        ...,
+        description="The technical domains related to the question",
+        examples=[
+            "algorithms",
+            "hardware",
+            "software",
+            "strategy",
+            "rules",
+            "communication",
+            "control",
+        ],
+    )
     sub_questions: List[str] = Field(
-        ..., description="The sub-questions related to the question"
+        ..., description="The sub-questions related to the question", max_length=3
     )
 
 
