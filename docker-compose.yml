@@ -4,8 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: small_size_league_discord_expert
-    volumes:
-      - .:/app
     env_file:
       - .env
     develop:
@@ -22,15 +20,15 @@ services:
         # Rebuild the image on changes to the `pyproject.toml`
         - action: rebuild
           path: ./pyproject.toml
-    depends_on:
-      - mcp_server
+    # depends_on:
+    #   - mcp_server
 
-  mcp_server:
-    image: ghcr.io/brunoocastro/small-size-league-mcp:latest
-    container_name: small_size_league_mcp
-    env_file:
-      - .env
-    ports:
-      - "8000:8000"
-    restart: on-failure
+  # mcp_server:
+  #   image: ghcr.io/brunoocastro/small-size-league-mcp:latest
+  #   container_name: small_size_league_mcp
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "8000:8000"
+  #   restart: on-failure
     
