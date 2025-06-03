@@ -4,7 +4,7 @@ import warnings
 
 from dotenv import load_dotenv
 
-from small_size_league_promoter.crew import SmallSizeLeaguePromoter
+from small_size_league_expert.crew import SmallSizeLeagueExpert
 
 # Load environment variables
 load_dotenv()
@@ -19,7 +19,7 @@ def run():
     }
 
     try:
-        result = SmallSizeLeaguePromoter().crew().kickoff(inputs=inputs)
+        result = SmallSizeLeagueExpert().crew().kickoff(inputs=inputs)
         print(
             f"RoboCup SSL article about '{inputs['topic']}' generated successfully. Result:"
         )

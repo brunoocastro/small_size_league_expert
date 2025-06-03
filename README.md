@@ -1,155 +1,117 @@
-# RoboCup Small Size League Promoter - AI Powered Article Generator
+# RoboCup Small Size League Expert - Discord Bot
 
-This project implements a multi-agent system using CrewAI to automatically generate informative articles about the RoboCup Small Size League (SSL). The system leverages official RoboCup SSL documentation and Wikipedia to create comprehensive, technically accurate articles on various aspects of the competition.
-
-## Demo
-
-Public API available at: https://ssl.otone.tech/
+This project implements an AI-powered Discord bot that answers questions about the RoboCup Small Size League (SSL). The bot uses a multi-agent system (CrewAI) to process user questions, retrieve information from official SSL sources, team description papers, and Wikipedia, and deliver well-formatted, referenced answers directly in Discord.
 
 ## Features
 
-- **Multi-agent Architecture**: Utilizes multiple specialized agents working collaboratively
-- **Wikipedia Integration**: Additional tool for supplementary information
-- **RoboCup SSL Knowledge Base**: Custom CrewAI tool for fetching information from official RoboCup SSL sources
-- **API Interface**: FastAPI server for easy article generation via HTTP requests
-- **Structured Output**: Articles formatted using Pydantic models for consistency
-- **LLM Flexibility**: Supports any LLM model supported by CrewAI
+- **Discord Integration**: Interact with the bot using slash commands (`/ask`, `/help`, `/contact`, `/feedback`)
+- **Multi-agent Architecture**: Specialized agents for language analysis, retrieval, ranking, and answer generation
+- **Official SSL Knowledge Base**: Fetches information from RoboCup SSL documentation, rules, and team papers via MCP integration
+- **Wikipedia Supplementation**: Uses Wikipedia for general technical concepts
+- **Structured, Referenced Answers**: Answers are formatted for Discord, with citations and markdown
+- **Error Handling**: Graceful error messages and troubleshooting tips for users
 
-### Future Features
-- **MCP Integration**: Additional tool for fetching information from [Small Size League MCP](https://github.com/brunoocastro/small-size-league-mcp)
+## How It Works
 
-## System Architecture
-
-The system consists of multiple specialized agents working collaboratively:
-
-1. **Analyst Agent**: Analyzes the topic and determines the best approach for generating an article
-2. **Researcher Agent**: Searches official RoboCup SSL sources and Wikipedia for comprehensive information about the specified topic
-3. **Writer Agent**: Creates a well-structured, technically accurate article based on the research findings
-4. **Editor Agent**: Reviews and refines the article for technical accuracy, completeness, and readability
+1. **User asks a question** in Discord using `/ask`.
+2. The bot analyzes the question, decomposes it, and determines the best sources to consult.
+3. It retrieves and ranks relevant information from SSL sources and Wikipedia.
+4. The answer is synthesized, formatted, and sent back to the Discord channel.
 
 ## Installation
 
-Ensure you have:
--  Python >=3.10 <3.13 installed on your system.
--  An API key for your LLM provider.
--  [UV](https://docs.astral.sh/uv/getting-started/installation/) installed on your system.
+### Requirements
 
-1. Clone this repository:
-```bash
-git clone https://github.com/brunoocastro/small_size_league_promoter
-cd small_size_league_promoter
-```
+- Python >=3.10, <3.13
+- [UV](https://docs.astral.sh/uv/getting-started/installation/) for dependency management
+- Discord bot token
+- (Optional) API keys for LLM providers (Groq, OpenAI, Gemini, etc.)
 
-2. Create a virtual environment and install dependencies:
-```bash
-uv venv
-source .venv/bin/activate
-uv sync
-```
+### Setup
 
-3. Set up environment variables by creating a `.env` file with:
-```
-MODEL=groq/llama3-8b-8192
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/brunoocastro/small_size_league_expert.git
+   cd small_size_league_expert
+   ```
 
-You need to also add the API key for your LLM provider to the `.env` file. In this example, we're using Groq. So we need to add the following:
-```
-GROQ_API_KEY=your_groq_api_key_here
-```
+2. **Create a virtual environment and install dependencies:**
+   ```bash
+   uv venv
+   source .venv/bin/activate
+   uv sync
+   ```
 
-> If you're using Gemini, you need to add the following:
-> ```
-> MODEL=google/gemini-1.5-flash
-> GOOGLE_API_KEY=your_google_api_key_here
-> ```
+3. **Configure environment variables:**
+   - Copy `env.example` to `.env` and fill in your credentials:
+     ```
+     DISCORD_BOT_TOKEN=your_discord_token_here
+     MODEL=groq/llama3-8b-8192
+     GROQ_API_KEY=your_groq_api_key_here
+     # Or for OpenAI/Gemini, set the appropriate keys
+     ```
+   - (Optional) Set `MCP_ENDPOINT` if using a custom MCP server.
+
+4. **(Optional) Run MCP server via Docker Compose:**
+   ```bash
+   docker compose up -d
+   ```
 
 ## Usage
 
-### Command Line execution
+### Running the Discord Bot
 
-The command line execution is the simplest way to generate an article.
-You just need to provide the topic you want to write about and the system will generate an article.
-
+Start the bot locally:
 ```bash
-python main.py <TOPIC>
+uv run python discord_bot.py
 ```
-
-for example:
+Or use the provided Makefile:
 ```bash
-python main.py "Robot specifications and limitations"
+make discord
 ```
 
-#### Example Topics
+### Discord Commands
 
-- Robot specifications and limitations
-- Field dimensions and layout
-- Vision system and tracking
-- Referee system
-- Tournament structure
-- Game rules
-- Communication protocols
-- Team requirements
+- `/ask <question>`: Ask any SSL-related question
+- `/help`: Get information about the bot and its capabilities
+- `/contact`: Contact the admin or get support info
+- `/feedback`: Send feedback or suggestions
 
-### API Server
+### Example Questions
 
-Run the FastAPI server with:
-
-```bash
-fastapi run api.py
-```
-
-This starts the API server at http://localhost:8000
-
-#### API Endpoints
-
-- `GET /`: Basic information about the API
-- `POST /generate-article`: Generate an article about a RoboCup SSL topic
-
-Example request:
-```json
-{
-  "topic": "Vision system and tracking",
-}
-```
+- What are the official SSL field dimensions?
+- How does the vision system track robots?
+- What communication protocols are allowed in SSL?
+- How do teams design their robot strategies?
 
 ## Development
 
 ### Project Structure
 
-- `main.py`: Command line interface
-- `api.py`: FastAPI server
-- `src/small_size_league_promoter/`
-  - `tools/`: Contains the RoboCup SSL and Wikipedia tools
-  - `config/`: Contains YAML configuration for agents and tasks
-  - `models.py`: Pydantic models for structured data
-  - `crew.py`: CrewAI implementation
-  - `main.py`: CrewAI run script
+- `discord_bot.py`: Main Discord bot logic and command definitions
+- `src/small_size_league_expert/crew.py`: CrewAI multi-agent system implementation
+- `src/small_size_league_expert/tools/`: Custom tools for SSL and Wikipedia integration
+- `src/small_size_league_expert/models.py`: Pydantic models for structured answers
+- `src/small_size_league_expert/config/`: YAML configs for agents and tasks
+- `bot_explanation.md`: Markdown help text for the bot
 
 ### Adding New Features
 
-- To modify agent behaviors: Update `config/agents.yaml`
-- To modify tasks: Update `config/tasks.yaml`
-- To add new tools: Create a new Python file in `src/small_size_league_promoter/tools/` and update `crew.py` to include it
+- Update or add new agents in `config/agents.yaml`
+- Add new tools in `src/small_size_league_expert/tools/` and register in `crew.py`
+- Adjust answer formatting or retrieval logic in `crew.py` and `models.py`
 
-## Requirements Met
+## Troubleshooting
 
-- ✅ Multi-agent system using CrewAI
-- ✅ Custom tools for RoboCup SSL and Wikipedia integration
-- ✅ Articles with minimum 300 words
-- ✅ Integration with free LLMs (Groq and Gemini)
-- ✅ Pydantic models for structured output
-- ✅ FastAPI interface
-- ✅ Well-documented code and README
-- ✅ Docker containerization
-- ✅ Command line interface
-
-Next goal is to add MCP integration.
+- If the bot is unresponsive or you see heartbeat warnings, ensure no blocking code is running in the event loop.
+- Check your `.env` file for correct tokens and API keys.
+- Review logs for errors related to MCP server or LLM provider connectivity.
 
 ## License
 
-This project is available under the MIT License. See the LICENSE file for details.
+This project is available under the MIT License.
 
 ## Credits
 
-This project was created using the CrewAI framework: https://docs.crewai.com/
-RoboCup SSL official resources: https://ssl.robocup.org/
+- Built with [CrewAI](https://docs.crewai.com/)
+- RoboCup SSL resources: https://ssl.robocup.org/

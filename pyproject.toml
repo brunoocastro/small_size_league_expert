@@ -1,5 +1,5 @@
 [project]
-name = "small_size_league_promoter"
+name = "small_size_league_expert"
 version = "0.1.0"
 description = "RoboCup SSL article generation system using CrewAI"
 authors = [{ name = "Bruno Castro", email = "bruno.c0310@gmail.com" }]
@@ -20,10 +20,6 @@ dependencies = [
     "discord.py>=2.0.0",
     "fastmcp>=2.3",
 ]
-
-[project.scripts]
-run_crew = "small_size_league_promoter.main:run"
-run_api = "small_size_league_promoter.main:run_api"
 
 [build-system]
 requires = ["hatchling"]
