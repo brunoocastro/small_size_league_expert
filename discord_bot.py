@@ -58,7 +58,9 @@ class Ask(commands.Cog):
                 )
                 return
 
-            crew_markdown_result = result.pydantic.get_final_answer()
+            crew_markdown_result = result.pydantic.get_final_answer(
+                user_mention=interaction.user.mention, original_question=question
+            )
 
             print(
                 f"✅ Crew execution completed successfully. Returning result to Discord with size {len(crew_markdown_result)}."

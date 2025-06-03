@@ -50,7 +50,7 @@ class SmallSizeLeagueExpert:
 
         try:
             server_params = {
-                "url": "http://localhost:8000/sse",
+                "url": self.settings.MCP_ENDPOINT,
             }
 
             # Create a persistent MCP adapter

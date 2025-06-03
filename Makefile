@@ -3,3 +3,12 @@ api:
 
 discord:
 	uv run python discord_bot.py
+
+watch:
+	docker compose watch
+
+up:
+	docker compose up -d
+
+down:
+	docker compose down

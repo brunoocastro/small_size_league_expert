@@ -1,22 +1,18 @@
-FROM python:3.12-slim
+# Python 3.12 image with uv
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV UV_LINK_MODE=copy
+
+# Set work directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy the rest of the application
+# Copy project files
 COPY . .
 
-RUN ls -la
+# Sync the project into a new environment, asserting the lockfile is up to date
+RUN uv sync --locked
 
-# Install the package
-RUN pip install .
-
-# Expose the port the app runs on
-EXPOSE 80
-
-# Command to run the application using FastAPI CLI
-CMD ["fastapi", "run", "api.py", "--host", "0.0.0.0", "--port", "80"]
+# Start the application
+ENTRYPOINT ["uv", "run", "python", "discord_bot.py"] 
