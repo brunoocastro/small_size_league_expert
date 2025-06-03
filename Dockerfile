@@ -15,4 +15,4 @@ COPY . .
 RUN uv sync --locked
 
 # Start the application
-ENTRYPOINT ["uv", "run", "python", "discord_bot.py"] 
+CMD ["uv", "run", "python", "discord_bot.py"] 
