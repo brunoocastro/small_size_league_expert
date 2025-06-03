@@ -90,8 +90,10 @@ retrieval_task:
     Execute strategic content retrieval using systematic search methodology to gather comprehensive, authoritative information for each sub-question.
 
     CHAIN OF THOUGHT PROCESS:
+
     Step 1: Source Prioritization Strategy
-    - Analyze each sub-question to determine optimal source types
+    - Analyze each question/sub-question to determine optimal source types
+    - Read the knowledge base (knowledge/content_description.txt file) to understand the content types
     - Prioritize MCP SSL-specific sources for domain knowledge
     - Identify Wikipedia needs for general technical concepts
     - Plan search query optimization for maximum relevance
@@ -108,35 +110,19 @@ retrieval_task:
     - Gather context for technical terms and methodologies
     - Supplement with academic and industry standards
 
-    Step 4: Content Quality Assessment
-    - Validate source authority and recency
-    - Ensure content directly addresses sub-questions
-    - Check for completeness and technical accuracy
-    - Document source metadata for ranking phase
+    <Content Retrieval Guidelines>
+    - MCP Rules documents will contain the rules of the competition, including field dimensions, game rules, and technical specifications, match duration, players limitations, etc.
+    - MCP Website documents will contain general data about the category, including events, teams, some category software technical details, etc.
+    - Team description papers are documents submitted by teams that describe their robots, strategies, and technical implementations. These kind of documents are usually submitted before the competition and can contain valuable information about the team’s approach to the game. It should be used to search any kind of deep technical information about the team’s choices related to algorithms, hardware, motors, sensors, radios, software and other technical aspects.
+    - Wikipedia articles will contain general technical concepts, algorithms, protocols, and hardware specifications that are not specific to SSL but provide foundational knowledge.
 
-    SEARCH STRATEGY EXAMPLES:
+    <INSTRUCTIONS>
+    - If the question is majority technical, prioritize MCP sources (team description papers)
+    - If is related to the category definitions, you can search the MCP website
+    - If the question is related to the game rules, prioritize MCP rules documents
 
-    Technical Sub-question: "What computer vision algorithms are used in SSL global vision?"
-    - MCP Search: "SSL vision system algorithms camera calibration object detection"
-    - Wikipedia Search: "computer vision object tracking algorithms stereo vision"
-
-    Rules Sub-question: "What are the official SSL field dimensions?"
-    - MCP Search: "SSL field specifications dimensions official rules"
-    - Wikipedia Search: "Not needed - domain-specific information"
-
-    Strategy Sub-question: "How do teams coordinate robot formations?"
-    - MCP Search: "SSL team coordination formation strategy tactical planning"
-    - Wikipedia Search: "multi-agent coordination distributed systems"
   expected_output: >
-    A comprehensive collection organized by sub-question containing:
-    1. Retrieved content snippets with exact source URLs
-    2. Source authority level (official/academic/community)
-    3. Content relevance score (1-10) for each snippet
-    4. Publication date or last update when available
-    5. Technical depth level (basic/intermediate/advanced)
-    6. Coverage completeness assessment for each sub-question
-    7. Identified knowledge gaps where no suitable content was found
-
+    A comprehensive collection of documents organized by question, sub-questions or keywords.
     Format: Structured list with clear source attribution and metadata for optimal ranking phase input.
   agent: retriever
 
@@ -217,7 +203,6 @@ answer_generation_task:
     - Analyze ranked content for logical flow and narrative structure
     - Identify key concepts requiring definition or context
     - Plan information hierarchy from fundamental to advanced
-    - Determine optimal balance between comprehensiveness and conciseness
 
     Step 2: Language and Formatting Adaptation
     - Detect target language from original question analysis
@@ -231,35 +216,15 @@ answer_generation_task:
     - Design reference format for translated content marking
     - Validate all links are functional and accessible
 
-    Step 4: Educational Value Optimization
-    - Structure content for progressive understanding
-    - Include practical implications where relevant
-    - Anticipate follow-up questions and address preemptively
-    - Balance technical depth with accessibility
-
     <INSTRUCTIONS>
-      CHARACTER LIMIT MANAGEMENT:
-      - Target 1800 characters maximum (200 character buffer)
-      - Prioritize most critical information first
-      - Use bullet points for efficient information density
-      - Implement graceful truncation with continuation indicators
-
-      RESPONSE STRUCTURE TEMPLATE:
-
-      ```markdown
-      **🤖 Based on your question: "{original_question}"**\n\n
-      ## 🔍 [Main Concept Title]\n
-      [Core explanation with inline citations]\n
-      ### 📋 Key Technical Details:\n
-      - Specific fact with [source](link)\n
-      - Another fact with [source](link)\n
-      - Additional detail where the source will be mentioned after\n
-      - A comment that is referred to the above fact. [Source](link)\n
-      ### ⚙️ Practical Implications:\n
-      [How this applies in real SSL contexts]\n
-      ---\n
-      *⚠️ This answer is AI-generated from SSL knowledge sources. Verify critical information with official SSL documentation.*
-      ```
+      - Structure content for progressive understanding
+      - Include practical implications where relevant
+      - Balance technical depth with accessibility
+      - CHARACTER LIMIT MANAGEMENT:
+        - Target 1800 characters maximum (200 character buffer)
+        - Prioritize most critical information first
+        - Use bullet points for efficient information density
+        - Implement graceful truncation with continuation indicators
 
     FORMATTING EXAMPLES:
 
@@ -303,17 +268,36 @@ answer_generation_task:
     Question: {original_question}
 
   expected_output: >
-    A Discord-optimized response containing:
-    1. Question acknowledgment in original language
-    2. Structured answer with clear sections and headers
-    3. Inline source citations for every factual claim
-    4. Strategic emoji usage for engagement and readability
-    5. Technical accuracy with appropriate complexity level
-    6. Character count under 2000 with graceful handling if exceeded
-    7. Proper translation markers for non-English content
-    8. Professional disclaimer and verification reminder
-    9. Engaging format encouraging further learning
-    10. Line breaks and bullet points for clarity
+    A professionally formatted Discord response that includes:
+    1. Original question acknowledgment in the detected language
+    2. Comprehensive answer synthesized from ranked content sources
+    3. Inline citations for all factual claims with functional links
+    4. Strategic emoji usage for enhanced readability and engagement
+    5. Structured format using headers, bullet points, and clear sections
+    6. Character count optimized for Discord (target 1800, max 2000 characters)
+    7. Educational value with progressive information hierarchy
+    8. AI-generated disclaimer in appropriate language
+    9. Graceful handling of character limit constraints with content prioritization
+    10. Technical accuracy maintained through authoritative source integration
 
-    Format: Discord Markdown with functional links, proper formatting, line breaking, and educational structure optimized for SSL community engagement.
+    The response must follow the specified markdown template structure and maintain consistency with the provided formatting examples for different languages.
+
+    Output format for reference:
+    ```markdown
+    **🤖 Based on your question: "{original_question}"**\n\n
+    ## 🔍 Main Concept Title\n
+    Core explanation with inline citations\n
+    ### 📋 Key Technical Details:\n
+    - Specific fact with [source](link)\n
+    - Another fact with [source](link)\n
+    - Additional detail where the source will be mentioned after\n
+    - A comment that is referred to the above fact. [Source](link)\n
+    ### ⚙️ Practical Implications:\n
+    [How this applies in real SSL contexts]\n
+    ---\n
+    *⚠️ This answer is AI-generated from SSL knowledge sources. Verify critical information with official SSL documentation.*
+    ```
+
+    The answer must be inserted into the `markdown_answer` field of the task output.
+
   agent: answer_generator

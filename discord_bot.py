@@ -1,5 +1,4 @@
 import asyncio
-import concurrent.futures
 import traceback
 
 from discord import Intents, Interaction, Object, app_commands
@@ -12,34 +11,28 @@ settings = DiscordSettings()
 
 intents = Intents.default()
 # intents.message_content = True
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.AutoShardedBot(command_prefix="!", intents=intents)
 
 
 class Ask(commands.Cog):
+    crew_instance = None
+
     def __init__(self, bot):
         self.bot = bot
-        self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=2)
 
     async def _run_crew_safely(self, inputs):
-        """Run the crew in a thread pool to avoid event loop conflicts."""
-
-        def run_crew_sync():
-            try:
-                crew_instance = SmallSizeLeagueExpert()
-                # Use synchronous kickoff to avoid async conflicts
-                result = crew_instance.crew().kickoff(inputs=inputs)
-                # Cleanup resources
-                crew_instance.cleanup_mcp_tools()
-                return result
-            except Exception as e:
-                print(f"Error in crew execution: {e}")
-                traceback.print_exc()
-                raise e
-
-        # Run in thread pool to isolate from Discord's event loop
-        loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(self.executor, run_crew_sync)
-        return result
+        """Run the crew async, ensuring no blocking in Discord's event loop."""
+        try:
+            self.crew_instance = SmallSizeLeagueExpert()
+            result = await self.crew_instance.crew().kickoff_async(inputs=inputs)
+            return result
+        except Exception as e:
+            print(f"Error in crew execution: {e}")
+            traceback.print_exc()
+            raise e
+        finally:
+            if self.crew_instance:
+                self.crew_instance.cleanup_mcp_tools()
 
     @app_commands.command(name="ask", description="Ask any question")
     @app_commands.describe(
@@ -56,19 +49,24 @@ class Ask(commands.Cog):
             # Use the safer crew execution method
             result = await self._run_crew_safely(inputs)
 
-            print(f"✅ Crew execution finished. Result type: {type(result.pydantic)}")
+            if not result or not result.pydantic:
+                print(
+                    "❌ Crew execution returned no result or invalid pydantic output."
+                )
+                await interaction.followup.send(
+                    f"{interaction.user.mention}, I couldn't find an answer to your question. Please try rephrasing it."
+                )
+                return
 
-            final_answer = f'{interaction.user.mention}: "{question}"\n\n{result.pydantic.final_answer}'
+            crew_markdown_result = result.pydantic.get_final_answer()
 
-            cropped_message = "... (truncated per Discord message size limit)"
-            message_size_limit = 2000 - len(cropped_message)
+            print(
+                f"✅ Crew execution completed successfully. Returning result to Discord with size {len(crew_markdown_result)}."
+            )
 
-            cropped_answer = final_answer[:message_size_limit]
+            print(f"Full result: {result.pydantic.model_dump_json(indent=2)}")
 
-            if len(final_answer) > message_size_limit:
-                cropped_answer = cropped_answer + cropped_message
-
-            await interaction.followup.send(cropped_answer)
+            await interaction.followup.send(crew_markdown_result)
 
         except Exception as e:
             print(f"❌ Error in ask command: {e}")
@@ -87,10 +85,6 @@ class Ask(commands.Cog):
                 await interaction.followup.send(error_message)
             except Exception as followup_error:
                 print(f"Failed to send error message: {followup_error}")
-
-    def cog_unload(self):
-        """Cleanup when the cog is unloaded."""
-        self.executor.shutdown(wait=True)
 
 
 # Introduce bot - Some commands to explain what the bot is for
@@ -113,10 +107,6 @@ class Help(commands.Cog):
     @app_commands.command(name="help", description="Help command")
     async def help(self, interaction: Interaction):
         await interaction.response.send_message(self.markdown_explanation)
-
-    @app_commands.command(name="info", description="Info command (alias for help)")
-    async def info(self, interaction: Interaction):
-        await self.help(interaction)
 
 
 class Contact(commands.Cog):

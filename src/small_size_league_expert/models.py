@@ -66,7 +66,7 @@ class RankResult(Question):
     ranked_answers: List[RankedAnswer] = Field(..., description="The ranked answers")
 
 
-class DiscordAnswer(Question, RankedAnswer):
+class DiscordAnswer(RankResult):
     """A Discord answer.
     This is the final answer that will be sent to the Discord channel.
     It combines the answer and the references in a way that is easy to understand and read.
@@ -76,15 +76,25 @@ class DiscordAnswer(Question, RankedAnswer):
     - The answer should be correctly referenced to the sources, using the format: [resumed text from source](reference link).
     """
 
-    final_answer: str = Field(
-        ..., description="The final answer that combines the answer and the references."
+    markdown_answer: str = Field(
+        ..., description="The answer in Markdown format for Discord"
     )
 
-    def format_markdown(self) -> str:
-        """Format the question and answer as markdown."""
-        markdown = f"Q: {self.question}\n\n"
-        markdown += f"A: \n{self.answer}\n\n"
-        markdown += "References:\n"
-        for i, ref in enumerate(self.references, 1):
-            markdown += f"- {i}. {ref}\n"
-        return markdown
+    def get_final_answer(
+        self, user_mention: str | None = None, original_question: str | None = None
+    ) -> str:
+        """Get the final answer in Markdown format."""
+
+        if user_mention:
+            final_answer = f'**{user_mention}**: *"{original_question or self.question}"*\n\n{self.markdown_answer}'
+        else:
+            final_answer = self.markdown_answer
+
+        cropped_message = "... **(truncated due to size limit)**"
+        message_size_limit = 2000 - len(cropped_message)
+
+        cropped_answer = final_answer[:message_size_limit]
+
+        if len(final_answer) > message_size_limit:
+            cropped_answer = cropped_answer + cropped_message
+        return cropped_answer

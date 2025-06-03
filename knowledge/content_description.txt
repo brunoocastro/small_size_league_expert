@@ -1,22 +1,19 @@
-# knowledge.txt
+# Description of each tool
 
 ## 1. Small Size Soccer Website Content
 - **What it is**: The official RoboCup Small Size League (SSL) website.  
 - **Purpose**: Inform the general public and teams about news, schedules, results, and provide file downloads (e.g., rulebooks, registration forms).  
 - **Format**: High-level text, images, links to PDFs, videos, result tables.  
 - **When to use**: To fetch updates, upcoming events, forms, and official files.  
-- **Recommended tool**: Simple web browser or a static page scraper.
 
-## 2. Rules Content
+## 2. Small Size Soccer Rules Content
 - **What it is**: The formal SSL rulebook, usually provided as a PDF or HTML document.  
 - **Purpose**: Define technical regulations, robot dimensions, communication protocols, penalties, and game procedures.  
 - **Format**: Structured document with numbered sections/articles, technical tables, and diagrams.  
 - **When to use**: To verify robot dimensions, hardware requirements, in-game behavior rules, and compliance.  
-- **Recommended tool**: PDF/HTML parser plus keyword search (e.g., regex on extracted text).
 
-## 3. Team Description Paper Content
+## 3. Team Description Paper (TDP) Content
 - **What it is**: A paper each team submits detailing their design, algorithms, software architecture, and strategies.  
 - **Purpose**: Present technical solutions, computer vision approaches, path-planning, control methods, and innovations.  
 - **Format**: Short academic article (4–6 pages) with Introduction, Methodology, Results, Conclusion, and References sections.  
 - **When to use**: To extract implementation details, robot/software configurations, and compare approaches or performance benchmarks.  
-- **Recommended tool**: NLP pipeline for section extraction; figure/table analysis; text summarizer.
