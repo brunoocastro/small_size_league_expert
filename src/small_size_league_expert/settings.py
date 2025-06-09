@@ -8,4 +8,5 @@ class Settings(BaseSettings):
     )
 
     MODEL: str = "groq/llama-3.3-70b-versatile"
-    MCP_ENDPOINT: str = "http://localhost:8000/sse"
+    MCP_ENDPOINT: str = "http://localhost:8888/mcp"
+    MCP_TRANSPORT_TYPE: str = "streamable-http"

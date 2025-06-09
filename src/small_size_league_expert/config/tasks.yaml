@@ -2,6 +2,8 @@ language_detection_decomposition_task:
   description: >
     Systematically analyze the input question to detect language and decompose into strategic sub-questions that maximize retrieval effectiveness.
 
+    Today's date is: {current_date}
+
     # CHAIN OF THOUGHT PROCESS:
     Step 1: Language Detection Analysis
     - Identify primary language using linguistic markers

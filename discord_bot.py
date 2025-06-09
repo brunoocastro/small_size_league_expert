@@ -1,5 +1,5 @@
-import asyncio
 import traceback
+from datetime import datetime
 
 from discord import Intents, Interaction, Object, app_commands
 from discord.ext import commands
@@ -20,38 +20,34 @@ class Ask(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def _run_crew_safely(self, inputs):
-        """Run the crew async, ensuring no blocking in Discord's event loop."""
-        try:
-            self.crew_instance = SmallSizeLeagueExpert()
-            result = await self.crew_instance.crew().kickoff_async(inputs=inputs)
-            return result
-        except Exception as e:
-            print(f"Error in crew execution: {e}")
-            traceback.print_exc()
-            raise e
-        finally:
-            if self.crew_instance:
-                self.crew_instance.cleanup_mcp_tools()
-
     @app_commands.command(name="ask", description="Ask any question")
     @app_commands.describe(
         question="Your question related to RoboCUP Small Size League category"
     )
     async def ask(self, interaction: Interaction, question: str):
+        interactionID = interaction.id
+        print(f"🔔 Interaction ID: {interactionID} - Received question: {question}")
+        print(
+            f"[{interactionID}] 🔍 {interaction.user} asked: {question}. Deferring the response."
+        )
         await interaction.response.defer(thinking=True)
+        print(f"[{interactionID}] 🔄 Processing question: {question}")
 
         try:
-            inputs = {"original_question": question}
+            inputs = {
+                "original_question": question,
+                "current_date": datetime.now().isoformat(),
+            }
 
-            print("🚀 Kicking off SSL expert crew...")
+            print(f"[{interactionID}] 🚀 Kicking off SSL expert crew...")
+
+            self.crew_instance = SmallSizeLeagueExpert()
+            result = await self.crew_instance.crew().kickoff_async(inputs=inputs)
 
             # Use the safer crew execution method
-            result = await self._run_crew_safely(inputs)
-
             if not result or not result.pydantic:
                 print(
-                    "❌ Crew execution returned no result or invalid pydantic output."
+                    f"[{interactionID}] ❌ Crew execution returned no result or invalid pydantic output."
                 )
                 await interaction.followup.send(
                     f"{interaction.user.mention}, I couldn't find an answer to your question. Please try rephrasing it."
@@ -63,15 +59,17 @@ class Ask(commands.Cog):
             )
 
             print(
-                f"✅ Crew execution completed successfully. Returning result to Discord with size {len(crew_markdown_result)}."
+                f"[{interactionID}] ✅ Crew execution completed successfully. Returning result to Discord with size {len(crew_markdown_result)}."
             )
 
-            print(f"Full result: {result.pydantic.model_dump_json(indent=2)}")
+            print(
+                f"[{interactionID}] Full result: {result.pydantic.model_dump_json(indent=2)}"
+            )
 
             await interaction.followup.send(crew_markdown_result)
 
         except Exception as e:
-            print(f"❌ Error in ask command: {e}")
+            print(f"[{interactionID}] ❌ Error in ask command: {e}")
             traceback.print_exc()
 
             error_message = (
@@ -86,7 +84,9 @@ class Ask(commands.Cog):
             try:
                 await interaction.followup.send(error_message)
             except Exception as followup_error:
-                print(f"Failed to send error message: {followup_error}")
+                print(
+                    f"[{interactionID}] Failed to send error message: {followup_error}"
+                )
 
 
 # Introduce bot - Some commands to explain what the bot is for
@@ -186,7 +186,7 @@ if __name__ == "__main__":
             print(f"❌ Fatal error: {e}")
             traceback.print_exc()
         finally:
-            print("🔄 Cleaning up...")
+            print("🔄 Cleaning up bot...")
             await bot.close()
 
     asyncio.run(main())
