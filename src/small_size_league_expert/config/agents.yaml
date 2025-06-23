@@ -1,4 +1,4 @@
-language_decomposer:
+question_handler:
   role: >
     RoboCup SSL Linguistic Analysis and Question Decomposition Specialist
   goal: >

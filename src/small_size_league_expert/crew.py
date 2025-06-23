@@ -90,10 +90,10 @@ class SmallSizeLeagueExpert:
         )
 
     @agent
-    def language_decomposer(self) -> Agent:
+    def question_handler(self) -> Agent:
         """Create the language detector and decomposer agent."""
         return Agent(
-            config=self.agents_config["language_decomposer"],
+            config=self.agents_config["question_handler"],
             llm=self.get_llm(),
             verbose=True,
         )
@@ -141,10 +141,10 @@ class SmallSizeLeagueExpert:
         )
 
     @task
-    def language_detection_decomposition_task(self) -> Task:
+    def question_analysis_task(self) -> Task:
         """Detect language and decompose the question."""
         return Task(
-            config=self.tasks_config["language_detection_decomposition_task"],
+            config=self.tasks_config["question_analysis_task"],
             output_pydantic=Question,
         )
 
@@ -177,13 +177,13 @@ class SmallSizeLeagueExpert:
         """Creates the SSL Q&A crew for Discord."""
         return Crew(
             agents=[
-                self.language_decomposer(),
+                self.question_handler(),
                 self.retriever(),
                 self.ranker(),
                 self.answer_generator(),
             ],
             tasks=[
-                self.language_detection_decomposition_task(),
+                self.question_analysis_task(),
                 self.retrieval_task(),
                 self.ranking_task(),
                 self.answer_generation_task(),

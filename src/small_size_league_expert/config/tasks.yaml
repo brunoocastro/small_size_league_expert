@@ -1,4 +1,4 @@
-language_detection_decomposition_task:
+question_analysis_task:
   description: >
     Systematically analyze the input question to detect language and decompose into strategic sub-questions that maximize retrieval effectiveness.
 
@@ -85,7 +85,7 @@ language_detection_decomposition_task:
        - Are directly answerable using available sources
        - Maintain semantic coherence with original question
        - Follow the few-shot examples pattern
-  agent: language_decomposer
+  agent: question_handler
 
 retrieval_task:
   description: >
@@ -122,6 +122,7 @@ retrieval_task:
     - If the question is majority technical, prioritize MCP sources (team description papers)
     - If is related to the category definitions, you can search the MCP website
     - If the question is related to the game rules, prioritize MCP rules documents
+    - Do not generate examples or explanations, just retrieve the content
 
   expected_output: >
     A comprehensive collection of documents organized by question, sub-questions or keywords.
@@ -191,6 +192,10 @@ ranking_task:
     5. Identified content gaps requiring synthesis or acknowledgment
     6. Recommended answer structure using ranked content
     7. Quality assurance notes for answer generation phase
+    8. Do not include any content that is not directly relevant to the original question or sub-questions.
+    9. Ensure that none  of the content is duplicated across the ranked snippets.
+    10. Ensure that the content is in English, even if the original question was in another language.
+    11. Ensure that no examples or explanations are generated, just the ranked retrieved content.
 
     Format: Structured ranking with clear rationale enabling optimal answer synthesis.
   agent: ranker
