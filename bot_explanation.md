@@ -8,6 +8,4 @@ I'm here to answer questions about RoboCup Small Size League.
 
 ### How to use:
 - Use /ask to ask a question.
-- The question should be related to RoboCup Small Size League.
-- Use /contact to contact the admin.
-- Use /feedback to give feedback.
+  - The question should be related to RoboCup Small Size League.
