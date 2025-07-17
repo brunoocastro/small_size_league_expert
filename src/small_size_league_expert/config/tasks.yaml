@@ -4,20 +4,21 @@ question_analysis_task:
 
     Today's date is: {current_date}
 
-    # CHAIN OF THOUGHT PROCESS:
     Step 1: Language Detection Analysis
     - Identify primary language using linguistic markers
     - Note any mixed-language elements or technical terms
-    - Assign ISO language code with confidence level
-    - Write the exact same question in English for consistency
+    - Assign ISO language code
 
     Step 2: Question Semantic Analysis
-    - Extract core technical concepts
-    - Identify question type (what/how/why/when/where)
-    - Determine complexity level and target audience
+    - Write the exact same question in English for search purposes
+    - Analyze question structure for:
+      - Core technical concepts
+      - Keywords and phrases
+      - Question type (what/how/why/when/where)
+      - Complexity level and target audience
 
-    Step 3: Field of Knowledge Identification
-    - Classify question into SSL-specific domains (technical/rules/strategy)
+    Step 3: Field of Knowledge classification
+    - Classify question into Small Size League specific domains (technical/rules/strategy)
     - Classify question into general technical domains (algorithms/hardware/software)
     - Identify any cross-domain relationships (e.g., hardware affecting strategy)
 
@@ -90,8 +91,6 @@ question_analysis_task:
 retrieval_task:
   description: >
     Execute strategic content retrieval using systematic search methodology to gather comprehensive, authoritative information for each sub-question.
-
-    CHAIN OF THOUGHT PROCESS:
 
     Step 1: Source Prioritization Strategy
     - Analyze each question/sub-question to determine optimal source types
@@ -235,42 +234,45 @@ answer_generation_task:
 
     FORMATTING EXAMPLES:
 
-    Question: "How does SSL vision work?"
-    Answer:
-    ```markdown
-    **🤖 Based on your question: "How does SSL vision work?"**\n\n
-    # 🤖 SSL Global Vision System\n
-    The [SSL vision system uses multiple overhead cameras](https://ssl.robocup.org/vision) to track all robots and the ball simultaneously...\n
-    *⚠️ This answer is AI-generated from SSL knowledge sources. Verify critical information with official SSL documentation.*\n
-    ```
+    # Example 1:
+      Question: "How does SSL vision work?"
+      Answer:
+      ```markdown
+      **🤖 Based on your question: "How does SSL vision work?"**\n\n
+      # 🤖 SSL Global Vision System\n
+      The [SSL vision system uses multiple overhead cameras](https://ssl.robocup.org/vision) to track all robots and the ball simultaneously...\n
+      *⚠️ This answer is AI-generated from SSL knowledge sources. Verify critical information with official SSL documentation.*\n
+      ```
 
-    Question: "¿Cómo funciona la visión SSL?"
-    Answer:
-    ```markdown
-    "🤖 **Basado en tu pregunta: "¿Cómo funciona la visión SSL?"**\n\n
-    # 🔍 Sistema de Visión Global SSL\n
-    El [sistema de visión SSL utiliza múltiples cámaras aéreas](https://ssl.robocup.org/vision) para rastrear todos los robots y la pelota simultáneamente...\n
-    *⚠️ Esta respuesta es generada por IA a partir de fuentes de conocimiento SSL. Verifica la información crítica con la documentación oficial de SSL.*\n
-    ```
+    # Example 2:
+      Question: "¿Cómo funciona la visión SSL?"
+      Answer:
+      ```markdown
+      "🤖 **Basado en tu pregunta: "¿Cómo funciona la visión SSL?"**\n\n
+      # 🔍 Sistema de Visión Global SSL\n
+      El [sistema de visión SSL utiliza múltiples cámaras aéreas](https://ssl.robocup.org/vision) para rastrear todos los robots y la pelota simultáneamente...\n
+      *⚠️ Esta respuesta es generada por IA a partir de fuentes de conocimiento SSL. Verifica la información crítica con la documentación oficial de SSL.*\n
+      ```
 
-    Question: "Qual o tamanho do campo ?"
-    Answer:
-    ```markdown
-    "🤖 **Baseado na sua pergunta: "Qual o tamanho do campo?"**\n\n
-    # 🔍 Dimensões do Campo SSL\n
-    O campo de jogo deve ser retangular e ter as seguintes dimensões:\n
-    - Divisão A: 13,4 metros x 10,4 metros, com uma área de jogo de 12 metros x 9 metros.\n
-    - Divisão B: 10,4 metros x 7,4 metros, com uma área de jogo de 9 metros x 6 metros.\n
-    As dimensões exatas do campo e as marcações podem variar em até ±10% em cada dimensão linear. [Fonte](https://robocup-ssl.github.io/ssl-rules/sslrules.html)\n\n
-    ### 📋 Detalhes Técnicos:\n
-    - Área de defesa: retângulo tocando as linhas de gol centralmente em frente a ambos os gols.\n
-    - Tamanho da área de defesa: 3,6 metros x 1,8 metros para a Divisão A e 2 metros x 1 metro para a Divisão B. [Fonte](https://robocup-ssl.github.io/ssl-rules/sslrules.html)\n\n
-    ### ⚙️ Implicações Práticas:\n
-    Compreender as dimensões do campo é crucial para o planejamento de estratégias de jogo e posicionamento dos robôs. Isso pode afetar diretamente a eficácia das jogadas e a dinâmica da partida.
-    Busque o tamanho correto para a categoria do seu time.\n\n
-    ---\n
-    *⚠️ Esta resposta é gerada por IA a partir de fontes de conhecimento SSL. Verifica a informação crítica com a documentação oficial de SSL.*\n
-    ```
+    # Example 3:
+      Question: "Qual o tamanho do campo ?"
+      Answer:
+      ```markdown
+      "🤖 **Baseado na sua pergunta: "Qual o tamanho do campo?"**\n\n
+      # 🔍 Dimensões do Campo SSL\n
+      O campo de jogo deve ser retangular e ter as seguintes dimensões:\n
+      - Divisão A: 13,4 metros x 10,4 metros, com uma área de jogo de 12 metros x 9 metros.\n
+      - Divisão B: 10,4 metros x 7,4 metros, com uma área de jogo de 9 metros x 6 metros.\n
+      As dimensões exatas do campo e as marcações podem variar em até ±10% em cada dimensão linear. [Fonte](https://robocup-ssl.github.io/ssl-rules/sslrules.html)\n\n
+      ### 📋 Detalhes Técnicos:\n
+      - Área de defesa: retângulo tocando as linhas de gol centralmente em frente a ambos os gols.\n
+      - Tamanho da área de defesa: 3,6 metros x 1,8 metros para a Divisão A e 2 metros x 1 metro para a Divisão B. [Fonte](https://robocup-ssl.github.io/ssl-rules/sslrules.html)\n\n
+      ### ⚙️ Implicações Práticas:\n
+      Compreender as dimensões do campo é crucial para o planejamento de estratégias de jogo e posicionamento dos robôs. Isso pode afetar diretamente a eficácia das jogadas e a dinâmica da partida.
+      Busque o tamanho correto para a categoria do seu time.\n\n
+      ---\n
+      *⚠️ Esta resposta é gerada por IA a partir de fontes de conhecimento SSL. Verifica a informação crítica com a documentação oficial de SSL.*\n
+      ```
 
     Question: {original_question}
 

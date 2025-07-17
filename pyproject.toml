@@ -1,11 +1,10 @@
 [project]
 name = "small_size_league_expert"
 version = "0.1.0"
-description = "RoboCup SSL article generation system using CrewAI"
+description = "RoboCup SSL Expert Crew powered by LLMs"
 authors = [{ name = "Bruno Castro", email = "bruno.c0310@gmail.com" }]
 requires-python = ">=3.10,<3.13"
 dependencies = [
-    "crewai[tools]==0.121.0",
     "langchain-groq>=0.1.0",
     "langchain-google-genai>=0.1.0",
     "fastapi[standard]>=0.109.0",
@@ -14,12 +13,13 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "pydantic>=2.5.0",
     "langchain-openai>=0.2.14",
-    "crewai-tools[mcp]>=0.40.1",
+    "crewai-tools[mcp]>=0.55.0",
     "mcp>=1.6.0",
     "ruff>=0.11.6",
     "discord.py>=2.0.0",
     "fastmcp>=2.3",
     "httpx>=0.28.1",
+    "crewai[tools]>=0.148.0",
 ]
 
 [build-system]

@@ -6,6 +6,8 @@ services:
     container_name: small_size_league_discord_expert
     env_file:
       - .env
+    environment:
+      - MCP_ENDPOINT=http://ssl_mcp_server:8000
     develop:
       # Create a `watch` configuration to update the app
       watch:

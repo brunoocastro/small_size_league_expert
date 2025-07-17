@@ -1,6 +1,6 @@
 from crewai import LLM, Agent, Crew, Process, Task
 from crewai.knowledge.source.text_file_knowledge_source import TextFileKnowledgeSource
-from crewai.project import CrewBase, after_kickoff, agent, before_kickoff, crew, task
+from crewai.project import CrewBase, agent, crew, task
 from crewai.tools import BaseTool
 from crewai_tools import MCPServerAdapter
 
@@ -16,6 +16,8 @@ from .tools import WikipediaSearchTool
 
 # Create a text file knowledge source
 text_source = TextFileKnowledgeSource(file_paths=["content_description.txt"])
+
+settings = Settings()
 
 
 @CrewBase
@@ -33,54 +35,16 @@ class SmallSizeLeagueExpert:
     mcp_tools: list[BaseTool] = []
     mcp_adapter: MCPServerAdapter = None
 
+    mcp_server_params = [
+        {
+            "url": settings.MCP_ENDPOINT,
+            "transport": settings.MCP_TRANSPORT_TYPE,
+        }
+    ]
+
     def __init__(self):
         """Initialize with choice of LLM provider."""
         self.settings = Settings()
-
-    # Close MCP when the instance is destroyed
-    def __del__(self):
-        """Cleanup when the instance is destroyed."""
-        self.cleanup_mcp_adapter()
-
-    def setup_mcp_tools(self):
-        """Setup MCP tools with manual connection lifecycle."""
-        if self.settings.MCP_ENDPOINT is None:
-            print("⚠️ MCP endpoint is not configured. Skipping MCP tools setup.")
-            self.mcp_tools = []
-            self.mcp_adapter = None
-            return
-
-        if self.mcp_adapter is not None:
-            # Check MCP connection
-            print(f"🔄 Reusing existing MCP adapter. {self.mcp_adapter}")
-            return
-
-        server_params = {
-            "url": self.settings.MCP_ENDPOINT,
-            "transport": self.settings.MCP_TRANSPORT_TYPE,
-        }
-
-        try:
-            self.mcp_adapter = MCPServerAdapter(server_params)
-            print("🔌 MCP adapter initialized successfully.")
-            self.mcp_tools = self.mcp_adapter.tools
-        except Exception as e:
-            print(f"⚠️ Error initializing MCP tools ({type(e)}): {e}")
-            self.cleanup_mcp_adapter()
-
-    def cleanup_mcp_adapter(self):
-        """Cleanup MCP adapter with manual disconnection lifecycle."""
-        if hasattr(self, "mcp_adapter") and self.mcp_adapter is not None:
-            try:
-                print("🔌 Disconnecting MCP adapter...")
-                self.mcp_adapter.stop()  # Manual disconnection
-            except Exception as e:
-                print(f"⚠️ Error disconnecting MCP adapter ({type(e)}): {e}")
-            finally:
-                self.mcp_adapter = None
-                self.mcp_tools = []
-        else:
-            print("🔌 No MCP adapter to clean up. Skipping disconnection.")
 
     def get_llm(self):
         """Get the appropriate LLM based on the configuration."""
@@ -105,7 +69,7 @@ class SmallSizeLeagueExpert:
             f"Default tools for retriever agent: {''.join([f'\n- {tool.name}' for tool in tools])}"
         )
 
-        self.setup_mcp_tools()
+        self.mcp_tools = self.get_mcp_tools()
 
         if self.mcp_tools and len(self.mcp_tools) > 0:
             print("🔌 Adding MCP tools to retriever agent.")
@@ -119,6 +83,7 @@ class SmallSizeLeagueExpert:
             llm=self.get_llm(),
             verbose=True,
             tools=tools,
+            max_iter=15,
         )
 
     @agent
@@ -191,19 +156,3 @@ class SmallSizeLeagueExpert:
             verbose=True,
             process=Process.sequential,
         )
-
-    @before_kickoff
-    def prepare_mcp(self, inputs):
-        """Prepare MCP adapter before crew execution."""
-        if self.mcp_adapter is None:
-            print("🔌 Initializing MCP adapter before crew kickoff...")
-            self.setup_mcp_tools()
-        else:
-            print("🔄 Reusing existing MCP adapter.")
-        return inputs
-
-    @after_kickoff
-    def cleanup_mcp(self, result):
-        """Cleanup MCP adapter after crew execution."""
-        self.cleanup_mcp_adapter()
-        return result
